@@ -2,11 +2,11 @@ package com.stmtnode.lang.cx.value;
 
 import com.stmtnode.lang.compiler.Token;
 
-public class IdentifierCxCodeNode extends ValueCxCodeNode {
+public class StringNode extends ValueNode {
 
 	public final Token token;
 
-	public IdentifierCxCodeNode(Token token) {
+	public StringNode(Token token) {
 		this.token = token;
 	}
 

@@ -1,10 +1,11 @@
 package com.stmtnode.watch;
 
+import static java.util.stream.Collectors.toMap;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.stmtnode.lang.compiler.Lexer;
 import com.stmtnode.lang.compiler.Token;
@@ -30,7 +31,7 @@ public class Main {
 			List<ModuleData> modules = root.modules;
 			for (ModuleData module : modules) {
 				module.contents.entrySet().stream() //
-						.collect(Collectors.toMap(e -> e.getKey(), e -> compile(e.getKey(), e.getValue())));
+						.collect(toMap(e -> e.getKey(), e -> compile(e.getKey(), e.getValue())));
 			}
 		} finally {
 			System.out.println(System.currentTimeMillis() - time);
@@ -45,9 +46,9 @@ public class Main {
 				return new CxGrammar(tokens).parseUnit();
 			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
+		throw new IllegalArgumentException(path.toString());
 	}
 
 	public static void main(String[] args) {

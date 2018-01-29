@@ -1,4 +1,7 @@
 
+#include <unistd.h>
+
 func int main() {
-    printf("", "", "");
+    let local char str[100]
+    let local int server_fd; 
 }
