@@ -22,7 +22,7 @@ public class TaskQueue {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void close() {
 		queue.shutdown();

@@ -6,12 +6,12 @@ import java.util.Map;
 
 public class ModuleData {
 
-  public String name;
+	public String name;
 
-  public final Map<Path, String> contents = new HashMap<>();
+	public final Map<Path, String> contents = new HashMap<>();
 
-  public ModuleData(String name) {
-    this.name = name;
-  }
+	public ModuleData(String name) {
+		this.name = name;
+	}
 
 }

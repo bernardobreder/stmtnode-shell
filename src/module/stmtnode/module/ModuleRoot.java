@@ -4,14 +4,14 @@ import java.util.List;
 
 public class ModuleRoot {
 
-  public List<ModuleData> modules;
+	public List<ModuleData> modules;
 
-  /**
-   * @param modules
-   */
-  public ModuleRoot(List<ModuleData> modules) {
-    super();
-    this.modules = modules;
-  }
+	/**
+	 * @param modules
+	 */
+	public ModuleRoot(List<ModuleData> modules) {
+		super();
+		this.modules = modules;
+	}
 
 }
