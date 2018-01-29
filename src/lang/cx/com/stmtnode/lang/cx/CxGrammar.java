@@ -24,6 +24,7 @@ import com.stmtnode.lang.cx.type.TypeNode;
 import com.stmtnode.lang.cx.value.CallNode;
 import com.stmtnode.lang.cx.value.IdentifierNode;
 import com.stmtnode.lang.cx.value.NumberNode;
+import com.stmtnode.lang.cx.value.SizeofNode;
 import com.stmtnode.lang.cx.value.StringNode;
 import com.stmtnode.lang.cx.value.ValueNode;
 
@@ -215,6 +216,8 @@ public class CxGrammar extends Grammar {
 	protected ValueNode parseLiteral() throws SyntaxException {
 		if (is('(')) {
 			return parseExp();
+		} else if (is("sizeof")) {
+			return parseSizeof();
 		} else if (isString()) {
 			return parseString();
 		} else if (isNumber()) {
@@ -224,6 +227,14 @@ public class CxGrammar extends Grammar {
 		} else {
 			throw error("expected expression");
 		}
+	}
+
+	protected ValueNode parseSizeof() throws SyntaxException {
+		Token token = read("sizeof", "expected sizeof keyword");
+		read('(', "expected open sizeof");
+		TypeNode type = parseType();
+		read(')', "expected open sizeof");
+		return new SizeofNode(token, type);
 	}
 
 	protected ValueNode parseString() throws SyntaxException {
@@ -246,7 +257,7 @@ public class CxGrammar extends Grammar {
 		ValueNode left = new IdentifierNode(token);
 		while (is('(')) {
 			List<ValueNode> arguments = readNodes('(', "expected open parameter", ')', "expected close parameter", ',', this::parseValue);
-			left = new CallNode(left, arguments);
+			left = new CallNode(left.token, left, arguments);
 		}
 		return left;
 	}

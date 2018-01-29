@@ -1,6 +1,6 @@
 package com.stmtnode.lang.cx.type;
 
-public class WrapTypeNode extends TypeNode {
+public abstract class WrapTypeNode extends TypeNode {
 
 	public final TypeNode type;
 

@@ -3,5 +3,6 @@
 
 func int main() {
     let local char str[100]
-    let local int server_fd; 
+    let local int server_fd = socket(AF_INET, SOCK_STREAM, 0)
+    memset(server_fd, 0, sizeof(servaddr))
 }
