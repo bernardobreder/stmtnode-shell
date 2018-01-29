@@ -1,6 +1,8 @@
 package com.stmtnode.lang.compiler;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Grammar {
 
@@ -19,6 +21,28 @@ public class Grammar {
 
 	protected boolean eof(int count) {
 		return index + count >= tokens.length;
+	}
+
+	protected <T> List<T> readNodes(char open, String openMsg, char close, String closeMsg, char separator, SupplierGrammar<T> supplier) throws SyntaxException {
+		List<T> list = new ArrayList<>();
+		read(open, openMsg);
+		if (!can(close)) {
+			do {
+				list.add(supplier.get());
+			} while (can(separator));
+			read(close, closeMsg);
+		}
+		return list;
+	}
+
+	protected <T> List<T> readNodes(char open, String openMsg, char close, String closeMsg, SupplierGrammar<T> supplier) throws SyntaxException {
+		List<T> list = new ArrayList<>();
+		read(open, openMsg);
+		while (!is(close)) {
+			list.add(supplier.get());
+		}
+		read(close, closeMsg);
+		return list;
 	}
 
 	protected Token read(String word, String message) throws SyntaxException {
@@ -195,6 +219,16 @@ public class Grammar {
 			super(String.format("at %s with token '%s' at line %d and column %d: %s", token.source, token.word, token.line, token.column, message), token.offset);
 			this.token = token;
 		}
+
+	}
+
+	public static interface SupplierGrammar<T> {
+
+		/**
+		 * @return
+		 * @throws SyntaxException
+		 */
+		T get() throws SyntaxException;
 
 	}
 

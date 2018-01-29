@@ -2,9 +2,7 @@ package com.stmtnode.lang.cx;
 
 import java.util.List;
 
-import com.stmtnode.module.CodeNode;
-
-public class UnitCxCodeNode extends CodeNode {
+public class UnitCxCodeNode extends CxCodeNode {
 
 	public List<UnitCxCodeNode> nodes;
 

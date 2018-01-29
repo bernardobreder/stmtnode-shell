@@ -6,6 +6,12 @@ import java.util.List;
 
 import com.stmtnode.lang.compiler.Grammar;
 import com.stmtnode.lang.compiler.Token;
+import com.stmtnode.lang.cx.head.ArgumentDeclareCxCodeNode;
+import com.stmtnode.lang.cx.head.FunctionCxCodeNode;
+import com.stmtnode.lang.cx.stmt.BlockCxCodeNode;
+import com.stmtnode.lang.cx.stmt.StmtCxCodeNode;
+import com.stmtnode.lang.cx.type.IntTypeCxCodeNode;
+import com.stmtnode.lang.cx.type.TypeCxCodeNode;
 
 public class CxGrammar extends Grammar {
 
@@ -67,15 +73,35 @@ public class CxGrammar extends Grammar {
 		return null;
 	}
 
-	private UnitCxCodeNode parseFunction() throws SyntaxException {
+	private FunctionCxCodeNode parseFunction() throws SyntaxException {
 		Token token = read("func", "expected func keyword");
-		parseType();
+		TypeCxCodeNode type = parseType();
+		Token name = readIdentifier("expected name of function");
+		List<ArgumentDeclareCxCodeNode> arguments = readNodes('(', "expected open parameter", ')', "expected close parameter", ',', this::parseFunctionArgument);
+		BlockCxCodeNode block = parseBlock();
+		return new FunctionCxCodeNode(token, type, name, arguments, block);
 	}
 
-	private void parseType() {
-		if (can("int")) {
+	private ArgumentDeclareCxCodeNode parseFunctionArgument() throws SyntaxException {
+		TypeCxCodeNode type = parseType();
+		Token name = readIdentifier("expected name of argument");
+		return new ArgumentDeclareCxCodeNode(name, type);
+	}
 
+	private TypeCxCodeNode parseType() throws SyntaxException {
+		if (can("int")) {
+			return new IntTypeCxCodeNode();
+		} else {
+			throw error("expected type");
 		}
+	}
+
+	private BlockCxCodeNode parseBlock() throws SyntaxException {
+		return new BlockCxCodeNode(readNodes('{', "expected open block", '}', "expected close block", this::parseCommand));
+	}
+
+	private StmtCxCodeNode parseCommand() {
+		return null;
 	}
 
 }
