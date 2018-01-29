@@ -9,7 +9,10 @@ import java.util.List;
 
 import com.stmtnode.lang.compiler.Lexer;
 import com.stmtnode.lang.compiler.Token;
+import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.CxGrammar;
+import com.stmtnode.lang.cx.SourceCodeOutput;
+import com.stmtnode.lang.cx.head.UnitNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.ModuleData;
 import com.stmtnode.module.ModuleRoot;
@@ -26,15 +29,10 @@ public class Main {
 	}
 
 	private void execute(ModuleRoot root) {
-		long time = System.currentTimeMillis();
-		try {
-			List<ModuleData> modules = root.modules;
-			for (ModuleData module : modules) {
-				module.contents.entrySet().stream() //
-						.collect(toMap(e -> e.getKey(), e -> compile(e.getKey(), e.getValue())));
-			}
-		} finally {
-			System.out.println(System.currentTimeMillis() - time);
+		List<ModuleData> modules = root.modules;
+		for (ModuleData module : modules) {
+			module.contents.entrySet().stream() //
+					.collect(toMap(e -> e.getKey(), e -> compile(e.getKey(), e.getValue())));
 		}
 	}
 
@@ -43,7 +41,17 @@ public class Main {
 		Token[] tokens = new Lexer(path.toString(), content).execute();
 		try {
 			if (name.endsWith(".cx")) {
-				return new CxGrammar(tokens).parseUnit();
+				UnitNode unit = new CxGrammar(tokens).parseUnit();
+
+				SourceCodeOutput output = new SourceCodeOutput();
+				unit.writeToSource(output);
+				System.out.println(output.toString());
+
+				CCodeOutput coutput = new CCodeOutput();
+				unit.writeToC(coutput);
+				System.err.println(coutput.toString());
+
+				return unit;
 			}
 		} catch (ParseException e) {
 			throw new RuntimeException(e);

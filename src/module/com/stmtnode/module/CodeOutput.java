@@ -3,23 +3,31 @@ package com.stmtnode.module;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.stmtnode.lang.compiler.Token;
+
 public class CodeOutput {
+
+	private StringBuilder sb = new StringBuilder();
+
+	private int tab;
 
 	public void writeSpace() {
 		write(" ");
 	}
 
 	public void write(String text) {
-		// TODO Auto-generated method stub
+		sb.append(text);
+	}
 
+	public void write(Token token) {
+		write(token.word);
 	}
 
 	public void writeLine() {
-		// TODO Auto-generated method stub
-
+		sb.append('\n');
 	}
 
-	public <E extends CodeNode> void write(List<E> list, String separator, Consumer<E> consumer) {
+	public <E> void write(List<E> list, String separator, Consumer<E> consumer) {
 		if (list.isEmpty()) {
 			return;
 		}
@@ -32,15 +40,38 @@ public class CodeOutput {
 		}
 	}
 
-	public <E extends CodeNode> void writeLines(List<E> list, Consumer<E> consumer) {
+	public <E> void writeLines(List<E> list, Consumer<E> consumer) {
 		if (list.isEmpty()) {
 			return;
 		}
 		consumer.accept(list.get(0));
 		for (int i = 1; i < list.size(); i++) {
 			writeLine();
+			writeTab();
 			consumer.accept(list.get(i));
 		}
+	}
+
+	public void writeTab() {
+		for (int n = 0; n < tab; n++) {
+			sb.append('\t');
+		}
+	}
+
+	public void incTab() {
+		tab++;
+	}
+
+	public void decTab() {
+		tab--;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return sb.toString();
 	}
 
 }

@@ -3,8 +3,8 @@ package com.stmtnode.lang.cx.value;
 import java.util.List;
 
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.lang.cx.CxCodeOutput;
-import com.stmtnode.module.CodeOutput;
+import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.lang.cx.SourceCodeOutput;
 
 public class CallNode extends ValueNode {
 
@@ -22,7 +22,7 @@ public class CallNode extends ValueNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToSource(CodeOutput output) {
+	public void writeToSource(SourceCodeOutput output) {
 		left.writeToSource(output);
 		output.write("(");
 		output.write(arguments, ", ", e -> e.writeToSource(output));
@@ -33,8 +33,8 @@ public class CallNode extends ValueNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CxCodeOutput output) {
-		left.writeToSource(output);
+	public void writeToC(CCodeOutput output) {
+		left.writeToC(output);
 		output.write("(");
 		output.write(arguments, ", ", e -> e.writeToC(output));
 		output.write(")");

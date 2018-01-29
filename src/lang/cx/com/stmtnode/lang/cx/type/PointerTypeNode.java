@@ -1,7 +1,7 @@
 package com.stmtnode.lang.cx.type;
 
-import com.stmtnode.lang.cx.CxCodeOutput;
-import com.stmtnode.module.CodeOutput;
+import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.lang.cx.SourceCodeOutput;
 
 public class PointerTypeNode extends WrapTypeNode {
 
@@ -10,13 +10,13 @@ public class PointerTypeNode extends WrapTypeNode {
 	}
 
 	@Override
-	public void writeToC(CxCodeOutput output) {
+	public void writeToSource(SourceCodeOutput output) {
 		// TODO Auto-generated method stub
-
+	
 	}
 
 	@Override
-	public void writeToSource(CodeOutput output) {
+	public void writeToC(CCodeOutput output) {
 		// TODO Auto-generated method stub
 
 	}

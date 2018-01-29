@@ -1,5 +1,7 @@
 package com.stmtnode.module;
 
+import com.stmtnode.lang.cx.SourceCodeOutput;
+
 public abstract class CodeNode extends Node {
 
 	/**
@@ -7,6 +9,6 @@ public abstract class CodeNode extends Node {
 	 * 
 	 * @param output
 	 */
-	public abstract void writeToSource(CodeOutput output);
+	public abstract void writeToSource(SourceCodeOutput output);
 
 }

@@ -20,6 +20,7 @@ import com.stmtnode.lang.cx.stmt.ExpNode;
 import com.stmtnode.lang.cx.stmt.StmtNode;
 import com.stmtnode.lang.cx.type.CharTypeNode;
 import com.stmtnode.lang.cx.type.IntTypeNode;
+import com.stmtnode.lang.cx.type.StructTypeNode;
 import com.stmtnode.lang.cx.type.TypeNode;
 import com.stmtnode.lang.cx.value.CallNode;
 import com.stmtnode.lang.cx.value.IdentifierNode;
@@ -152,6 +153,9 @@ public class CxGrammar extends Grammar {
 			return new IntTypeNode();
 		} else if (can("char")) {
 			return new CharTypeNode();
+		} else if (can("struct")) {
+			Token name = readIdentifier("expected name of type");
+			return new StructTypeNode(name);
 		} else {
 			throw error("expected type");
 		}

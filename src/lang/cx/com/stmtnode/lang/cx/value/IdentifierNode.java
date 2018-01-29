@@ -1,8 +1,8 @@
 package com.stmtnode.lang.cx.value;
 
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.lang.cx.CxCodeOutput;
-import com.stmtnode.module.CodeOutput;
+import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.lang.cx.SourceCodeOutput;
 
 public class IdentifierNode extends ValueNode {
 
@@ -14,16 +14,16 @@ public class IdentifierNode extends ValueNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToSource(CodeOutput output) {
-		output.write(token.word);
+	public void writeToSource(SourceCodeOutput output) {
+		output.write(token);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CxCodeOutput output) {
-		output.write(token.word);
+	public void writeToC(CCodeOutput output) {
+		output.write(token);
 	}
 
 }

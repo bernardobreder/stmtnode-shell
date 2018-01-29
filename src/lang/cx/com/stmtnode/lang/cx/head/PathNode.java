@@ -3,6 +3,8 @@ package com.stmtnode.lang.cx.head;
 import java.util.List;
 
 import com.stmtnode.lang.compiler.Token;
+import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.lang.cx.SourceCodeOutput;
 
 public class PathNode extends HeadNode {
 
@@ -16,6 +18,22 @@ public class PathNode extends HeadNode {
 			throw new IllegalArgumentException();
 		}
 		this.token = tokens.size() == 1 ? tokens.get(0) : tokens.get(0).join(tokens.get(tokens.size() - 1));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeToSource(SourceCodeOutput output) {
+		output.write(tokens, "", e -> output.write(e));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeToC(CCodeOutput output) {
+		output.write(tokens, "", e -> output.write(e));
 	}
 
 }

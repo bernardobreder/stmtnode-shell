@@ -1,9 +1,9 @@
 package com.stmtnode.lang.cx.value;
 
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.lang.cx.CxCodeOutput;
+import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.type.TypeNode;
-import com.stmtnode.module.CodeOutput;
 
 public class SizeofNode extends ValueNode {
 
@@ -18,7 +18,7 @@ public class SizeofNode extends ValueNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToSource(CodeOutput output) {
+	public void writeToSource(SourceCodeOutput output) {
 		output.write("sizeof(");
 		type.writeToSource(output);
 		output.write(")");
@@ -28,9 +28,9 @@ public class SizeofNode extends ValueNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CxCodeOutput output) {
+	public void writeToC(CCodeOutput output) {
 		output.write("sizeof(");
-		type.writeToSource(output);
+		type.writeToC(output);
 		output.write(")");
 	}
 

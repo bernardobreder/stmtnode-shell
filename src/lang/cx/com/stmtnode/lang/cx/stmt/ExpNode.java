@@ -1,8 +1,8 @@
 package com.stmtnode.lang.cx.stmt;
 
-import com.stmtnode.lang.cx.CxCodeOutput;
+import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.value.ValueNode;
-import com.stmtnode.module.CodeOutput;
 
 public class ExpNode extends StmtNode {
 
@@ -16,7 +16,7 @@ public class ExpNode extends StmtNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToSource(CodeOutput output) {
+	public void writeToSource(SourceCodeOutput output) {
 		value.writeToSource(output);
 	}
 
@@ -24,7 +24,7 @@ public class ExpNode extends StmtNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CxCodeOutput output) {
+	public void writeToC(CCodeOutput output) {
 		value.writeToC(output);
 		output.write(";");
 	}

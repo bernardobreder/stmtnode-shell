@@ -1,10 +1,10 @@
 package com.stmtnode.lang.cx.stmt;
 
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.lang.cx.CxCodeOutput;
+import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.type.TypeNode;
 import com.stmtnode.lang.cx.value.ValueNode;
-import com.stmtnode.module.CodeOutput;
 
 public class DeclareArrayNode extends StmtNode {
 
@@ -27,13 +27,13 @@ public class DeclareArrayNode extends StmtNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToSource(CodeOutput output) {
+	public void writeToSource(SourceCodeOutput output) {
 		output.write("let local ");
 		type.writeToSource(output);
 		output.writeSpace();
-		output.write(name.word);
+		output.write(name);
 		output.write("[");
-		output.write(count.token.word);
+		output.write(count.token);
 		output.write("]");
 	}
 
@@ -41,12 +41,12 @@ public class DeclareArrayNode extends StmtNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CxCodeOutput output) {
-		type.writeToSource(output);
+	public void writeToC(CCodeOutput output) {
+		type.writeToC(output);
 		output.writeSpace();
-		output.write(name.word);
+		output.write(name);
 		output.write("[");
-		output.write(count.token.word);
+		output.write(count.token);
 		output.write("];");
 	}
 

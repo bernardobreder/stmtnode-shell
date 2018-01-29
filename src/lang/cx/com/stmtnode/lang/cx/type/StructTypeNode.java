@@ -1,13 +1,15 @@
-package com.stmtnode.lang.cx.value;
+package com.stmtnode.lang.cx.type;
 
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 
-public class StringNode extends ValueNode {
+public class StructTypeNode extends TypeNode {
 
-	public StringNode(Token token) {
-		super(token);
+	public final Token name;
+
+	public StructTypeNode(Token name) {
+		this.name = name;
 	}
 
 	/**
@@ -15,7 +17,7 @@ public class StringNode extends ValueNode {
 	 */
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
-		output.write(token);
+		output.write(name);
 	}
 
 	/**
@@ -23,7 +25,8 @@ public class StringNode extends ValueNode {
 	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
-		output.write(token);
+		output.write("struct ");
+		output.write(name);
 	}
 
 }
