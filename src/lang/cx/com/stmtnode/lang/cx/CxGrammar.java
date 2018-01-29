@@ -9,9 +9,14 @@ import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.head.ArgumentDeclareCxCodeNode;
 import com.stmtnode.lang.cx.head.FunctionCxCodeNode;
 import com.stmtnode.lang.cx.stmt.BlockCxCodeNode;
+import com.stmtnode.lang.cx.stmt.ExpCxCodeNode;
 import com.stmtnode.lang.cx.stmt.StmtCxCodeNode;
 import com.stmtnode.lang.cx.type.IntTypeCxCodeNode;
 import com.stmtnode.lang.cx.type.TypeCxCodeNode;
+import com.stmtnode.lang.cx.value.CallCxCodeNode;
+import com.stmtnode.lang.cx.value.IdentifierCxCodeNode;
+import com.stmtnode.lang.cx.value.StringCxCodeNode;
+import com.stmtnode.lang.cx.value.ValueCxCodeNode;
 
 public class CxGrammar extends Grammar {
 
@@ -20,7 +25,7 @@ public class CxGrammar extends Grammar {
 	}
 
 	public UnitCxCodeNode parseUnit() throws ParseException {
-		List<UnitCxCodeNode> nodes = new ArrayList<>();
+		List<CxCodeNode> nodes = new ArrayList<>();
 		while (!eof()) {
 			if (can('#')) {
 				nodes.add(parsePrecompiler());
@@ -43,22 +48,22 @@ public class CxGrammar extends Grammar {
 		}
 	}
 
-	protected UnitCxCodeNode parsePreprocessorInclude() {
+	protected UnitCxCodeNode parsePreprocessorInclude() throws SyntaxException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	protected UnitCxCodeNode parsePreprocessorDefine() {
+	protected UnitCxCodeNode parsePreprocessorDefine() throws SyntaxException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	protected UnitCxCodeNode parsePreprocessorTypedef() {
+	protected UnitCxCodeNode parsePreprocessorTypedef() throws SyntaxException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	protected UnitCxCodeNode parseUnitItem() throws SyntaxException {
+	protected CxCodeNode parseUnitItem() throws SyntaxException {
 		if (is("func")) {
 			return parseFunction();
 		} else if (is("let")) {
@@ -100,8 +105,88 @@ public class CxGrammar extends Grammar {
 		return new BlockCxCodeNode(readNodes('{', "expected open block", '}', "expected close block", this::parseCommand));
 	}
 
-	private StmtCxCodeNode parseCommand() {
+	private StmtCxCodeNode parseCommand() throws SyntaxException {
+		if (is("if")) {
+			return parseIf();
+		} else {
+			return parseExpression();
+		}
+	}
+
+	private StmtCxCodeNode parseIf() throws SyntaxException {
+		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private StmtCxCodeNode parseExpression() throws SyntaxException {
+		ExpCxCodeNode node = new ExpCxCodeNode(parseValue());
+		read(';', "expected ';' symbol");
+		return node;
+	}
+
+	private ValueCxCodeNode parseValue() throws SyntaxException {
+		return parseTernary();
+	}
+
+	private ValueCxCodeNode parseTernary() throws SyntaxException {
+		return parseOr();
+	}
+
+	private ValueCxCodeNode parseOr() throws SyntaxException {
+		return parseAnd();
+	}
+
+	private ValueCxCodeNode parseAnd() throws SyntaxException {
+		return parseCompare();
+	}
+
+	private ValueCxCodeNode parseCompare() throws SyntaxException {
+		return parseSum();
+	}
+
+	private ValueCxCodeNode parseSum() throws SyntaxException {
+		return parseMul();
+	}
+
+	private ValueCxCodeNode parseMul() throws SyntaxException {
+		return parseUnary();
+	}
+
+	private ValueCxCodeNode parseUnary() throws SyntaxException {
+		return parseLiteral();
+	}
+
+	private ValueCxCodeNode parseLiteral() throws SyntaxException {
+		if (is('(')) {
+			return parseExp();
+		} else if (isString()) {
+			return parseString();
+		} else if (isIdentifier()) {
+			return parseId();
+		} else {
+			throw error("expected expression");
+		}
+	}
+
+	private ValueCxCodeNode parseString() throws SyntaxException {
+		return new StringCxCodeNode(readString("expected string token"));
+	}
+
+	private ValueCxCodeNode parseExp() throws SyntaxException {
+		read('(', "expected open expression");
+		ValueCxCodeNode value = parseValue();
+		read(')', "expected close expression");
+		return value;
+	}
+
+	private ValueCxCodeNode parseId() throws SyntaxException {
+		Token token = readIdentifier("expected identifier");
+		ValueCxCodeNode left = new IdentifierCxCodeNode(token);
+		while (is('(')) {
+			List<ValueCxCodeNode> arguments = readNodes('(', "expected open parameter", ')', "expected close parameter", ',', this::parseValue);
+			left = new CallCxCodeNode(left, arguments);
+		}
+		return left;
 	}
 
 }

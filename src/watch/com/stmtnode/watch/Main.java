@@ -25,17 +25,23 @@ public class Main {
 	}
 
 	private void execute(ModuleRoot root) {
-		List<ModuleData> modules = root.modules;
-		for (ModuleData module : modules) {
-			module.contents.entrySet().stream() //
-					.collect(Collectors.toMap(e -> e.getKey(), e -> compile(e.getKey(), e.getValue())));
+		long time = System.currentTimeMillis();
+		try {
+			List<ModuleData> modules = root.modules;
+			for (ModuleData module : modules) {
+				module.contents.entrySet().stream() //
+						.collect(Collectors.toMap(e -> e.getKey(), e -> compile(e.getKey(), e.getValue())));
+			}
+		} finally {
+			System.out.println(System.currentTimeMillis() - time);
 		}
 	}
 
 	private CodeNode compile(Path path, String content) {
+		String name = path.toFile().getName();
 		Token[] tokens = new Lexer(path.toString(), content).execute();
 		try {
-			if (path.endsWith(".cx")) {
+			if (name.endsWith(".cx")) {
 				return new CxGrammar(tokens).parseUnit();
 			}
 		} catch (ParseException e) {
