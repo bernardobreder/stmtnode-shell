@@ -9,16 +9,22 @@ public class PointerTypeNode extends WrapTypeNode {
 		super(type);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
-		// TODO Auto-generated method stub
-	
+		type.writeToSource(output);
+		output.write("*");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
-		// TODO Auto-generated method stub
-
+		type.writeToC(output);
+		output.write("*");
 	}
 
 }

@@ -7,9 +7,12 @@ import com.stmtnode.lang.cx.SourceCodeOutput;
 
 public class UnitNode extends HeadNode {
 
-	public List<HeadNode> nodes;
+	public final List<HeadNode> includes;
 
-	public UnitNode(List<HeadNode> nodes) {
+	public final List<HeadNode> nodes;
+
+	public UnitNode(List<HeadNode> includes, List<HeadNode> nodes) {
+		this.includes = includes;
 		this.nodes = nodes;
 	}
 
@@ -18,6 +21,7 @@ public class UnitNode extends HeadNode {
 	 */
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
+		output.writeLines(includes, e -> e.writeToSource(output));
 		output.writeLines(nodes, e -> e.writeToSource(output));
 	}
 
@@ -26,6 +30,7 @@ public class UnitNode extends HeadNode {
 	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
+		output.writeLines(includes, e -> e.writeToC(output));
 		output.writeLines(nodes, e -> e.writeToC(output));
 	}
 

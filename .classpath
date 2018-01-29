@@ -5,6 +5,7 @@
 	<classpathentry kind="src" path="src/lang/compiler"/>
 	<classpathentry kind="src" path="src/lang/cx"/>
 	<classpathentry kind="src" path="src/json"/>
+	<classpathentry kind="src" path="src/runner"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

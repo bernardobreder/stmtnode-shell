@@ -2,6 +2,7 @@ package com.stmtnode.watch;
 
 import static java.util.stream.Collectors.toMap;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
@@ -16,6 +17,7 @@ import com.stmtnode.lang.cx.head.UnitNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.ModuleData;
 import com.stmtnode.module.ModuleRoot;
+import com.stmtnode.runner.RunnerProcess;
 
 public class Main {
 
@@ -50,6 +52,13 @@ public class Main {
 				CCodeOutput coutput = new CCodeOutput();
 				unit.writeToC(coutput);
 				System.err.println(coutput.toString());
+
+				try {
+					new RunnerProcess(coutput.toString());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				return unit;
 			}

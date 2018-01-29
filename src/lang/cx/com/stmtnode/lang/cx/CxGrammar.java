@@ -20,10 +20,16 @@ import com.stmtnode.lang.cx.stmt.ExpNode;
 import com.stmtnode.lang.cx.stmt.StmtNode;
 import com.stmtnode.lang.cx.type.CharTypeNode;
 import com.stmtnode.lang.cx.type.IntTypeNode;
+import com.stmtnode.lang.cx.type.PointerTypeNode;
 import com.stmtnode.lang.cx.type.StructTypeNode;
 import com.stmtnode.lang.cx.type.TypeNode;
+import com.stmtnode.lang.cx.value.AddressNode;
+import com.stmtnode.lang.cx.value.AssignNode;
 import com.stmtnode.lang.cx.value.CallNode;
+import com.stmtnode.lang.cx.value.CastNode;
+import com.stmtnode.lang.cx.value.GetNode;
 import com.stmtnode.lang.cx.value.IdentifierNode;
+import com.stmtnode.lang.cx.value.NotNode;
 import com.stmtnode.lang.cx.value.NumberNode;
 import com.stmtnode.lang.cx.value.SizeofNode;
 import com.stmtnode.lang.cx.value.StringNode;
@@ -36,15 +42,15 @@ public class CxGrammar extends Grammar {
 	}
 
 	public UnitNode parseUnit() throws ParseException {
+		List<HeadNode> includes = new ArrayList<>();
+		while (!eof() && can('#')) {
+			includes.add(parsePrecompiler());
+		}
 		List<HeadNode> nodes = new ArrayList<>();
 		while (!eof()) {
-			if (can('#')) {
-				nodes.add(parsePrecompiler());
-			} else {
-				nodes.add(parseUnitItem());
-			}
+			nodes.add(parseUnitItem());
 		}
-		return new UnitNode(nodes);
+		return new UnitNode(includes, nodes);
 	}
 
 	protected HeadNode parsePrecompiler() throws ParseException {
@@ -115,22 +121,18 @@ public class CxGrammar extends Grammar {
 
 	protected StmtNode parseDeclare() throws SyntaxException {
 		Token token = read("let", "expected let keyword");
-		if (can("local")) {
-			TypeNode type = parseType();
-			Token name = readIdentifier("expected name of variable");
-			if (can('[')) {
-				ValueNode count = parseNumber();
-				read(']', "expected close array count");
-				return new DeclareArrayNode(token, type, name, count);
-			}
-			if (can('=')) {
-				ValueNode value = parseValue();
-				return new DeclareValueNode(token, type, name, value);
-			}
-		} else {
-
+		TypeNode type = parseType();
+		Token name = readIdentifier("expected name of variable");
+		if (can('[')) {
+			ValueNode count = parseNumber();
+			read(']', "expected close array count");
+			return new DeclareArrayNode(token, type, name, count);
 		}
-		return null;
+		ValueNode value = null;
+		if (can('=')) {
+			value = parseValue();
+		}
+		return new DeclareValueNode(token, type, name, value);
 	}
 
 	protected FunctionNode parseFunction() throws SyntaxException {
@@ -149,6 +151,14 @@ public class CxGrammar extends Grammar {
 	}
 
 	protected TypeNode parseType() throws SyntaxException {
+		TypeNode type = parseTypeLiteral();
+		while (can('*')) {
+			type = new PointerTypeNode(type);
+		}
+		return type;
+	}
+
+	protected TypeNode parseTypeLiteral() throws SyntaxException {
 		if (can("int")) {
 			return new IntTypeNode();
 		} else if (can("char")) {
@@ -214,7 +224,25 @@ public class CxGrammar extends Grammar {
 	}
 
 	protected ValueNode parseUnary() throws SyntaxException {
-		return parseLiteral();
+		if (is('!')) {
+			return parseNot();
+		} else if (is('&')) {
+			return parseAddress();
+		}
+		ValueNode left = parseLiteral();
+		return left;
+	}
+
+	protected ValueNode parseNot() throws SyntaxException {
+		Token token = read('!', "expected not keyword");
+		ValueNode left = parseLiteral();
+		return new NotNode(token, left);
+	}
+
+	protected ValueNode parseAddress() throws SyntaxException {
+		Token token = read('&', "expected & symbol");
+		ValueNode left = parseUnary();
+		return new AddressNode(token, left);
 	}
 
 	protected ValueNode parseLiteral() throws SyntaxException {
@@ -253,15 +281,34 @@ public class CxGrammar extends Grammar {
 		read('(', "expected open expression");
 		ValueNode value = parseValue();
 		read(')', "expected close expression");
-		return value;
+		return parseGetCall(value);
 	}
 
 	protected ValueNode parseId() throws SyntaxException {
 		Token token = readIdentifier("expected identifier");
 		ValueNode left = new IdentifierNode(token);
-		while (is('(')) {
-			List<ValueNode> arguments = readNodes('(', "expected open parameter", ')', "expected close parameter", ',', this::parseValue);
-			left = new CallNode(left.token, left, arguments);
+		return parseGetCall(left);
+	}
+
+	protected ValueNode parseGetCall(ValueNode left) throws SyntaxException {
+		while (is('(') || is('.') || is('=')) {
+			if (is('(')) {
+				List<ValueNode> arguments = readNodes('(', "expected open parameter", ')', "expected close parameter", ',', this::parseValue);
+				left = new CallNode(left.token, left, arguments);
+			} else if (can('.')) {
+				if (can("cast")) {
+					read('(', "expected open cast");
+					TypeNode type = parseType();
+					read(')', "expected open cast");
+					left = new CastNode(left.token, left, type);
+				} else {
+					Token name = readIdentifier("expected name of field or function");
+					left = new GetNode(name, left, name);
+				}
+			} else if (can('=')) {
+				ValueNode value = parseValue();
+				left = new AssignNode(left.token, left, value);
+			}
 		}
 		return left;
 	}
