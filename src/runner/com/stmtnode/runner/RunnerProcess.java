@@ -29,7 +29,7 @@ public class RunnerProcess {
 				Process execProcess = new ProcessBuilder(execFile.getAbsolutePath()).start();
 				execProcess.waitFor();
 			} else {
-				throw new IllegalStateException(queue.stream().collect(joining("\n")));
+				throw new IOException(queue.stream().collect(joining("\n")));
 			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);

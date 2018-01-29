@@ -1,13 +1,14 @@
 package com.stmtnode.watch;
 
-import static java.util.stream.Collectors.toMap;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import com.stmtnode.lang.compiler.Grammar.SyntaxException;
 import com.stmtnode.lang.compiler.Lexer;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
@@ -31,39 +32,47 @@ public class Main {
 	}
 
 	private void execute(ModuleRoot root) {
-		List<ModuleData> modules = root.modules;
-		for (ModuleData module : modules) {
-			module.contents.entrySet().stream() //
-					.collect(toMap(e -> e.getKey(), e -> compile(e.getKey(), e.getValue())));
+		try {
+			System.out.println("Start reading...");
+			List<ModuleData> modules = root.modules;
+			for (ModuleData module : modules) {
+				Map<Path, CodeNode> codes = new HashMap<>();
+				for (Entry<Path, String> entry : module.contents.entrySet()) {
+					try {
+						codes.put(entry.getKey(), compile(entry.getKey(), entry.getValue()));
+					} catch (SyntaxException e) {
+						System.err.println(e.getMessage());
+					}
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 
-	private CodeNode compile(Path path, String content) {
+	private CodeNode compile(Path path, String content) throws SyntaxException {
 		String name = path.toFile().getName();
 		Token[] tokens = new Lexer(path.toString(), content).execute();
-		try {
-			if (name.endsWith(".cx")) {
-				UnitNode unit = new CxGrammar(tokens).parseUnit();
+		if (name.endsWith(".cx")) {
+			UnitNode unit = new CxGrammar(tokens).parseUnit();
 
-				SourceCodeOutput output = new SourceCodeOutput();
-				unit.writeToSource(output);
-				System.out.println(output.toString());
+			SourceCodeOutput output = new SourceCodeOutput();
+			unit.writeToSource(output);
+			// System.out.println(output.toString());
 
-				CCodeOutput coutput = new CCodeOutput();
-				unit.writeToC(coutput);
-				System.err.println(coutput.toString());
+			CCodeOutput coutput = new CCodeOutput();
+			unit.writeToC(coutput);
+			System.err.println(coutput.toString());
 
-				try {
-					new RunnerProcess(coutput.toString());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				return unit;
+			try {
+				System.out.println("Start compiling...");
+				new RunnerProcess(coutput.toString());
+			} catch (IOException e) {
+				System.out.println("Error at compiling...");
+				System.err.println(e.getMessage());
 			}
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
+
+			return unit;
 		}
 		throw new IllegalArgumentException(path.toString());
 	}

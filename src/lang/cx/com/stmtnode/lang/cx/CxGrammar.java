@@ -1,6 +1,5 @@
 package com.stmtnode.lang.cx;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class CxGrammar extends Grammar {
 		super(tokens);
 	}
 
-	public UnitNode parseUnit() throws ParseException {
+	public UnitNode parseUnit() throws SyntaxException {
 		List<HeadNode> includes = new ArrayList<>();
 		while (!eof() && can('#')) {
 			includes.add(parsePrecompiler());
@@ -53,7 +52,7 @@ public class CxGrammar extends Grammar {
 		return new UnitNode(includes, nodes);
 	}
 
-	protected HeadNode parsePrecompiler() throws ParseException {
+	protected HeadNode parsePrecompiler() throws SyntaxException {
 		if (is("include")) {
 			return parsePreprocessorInclude();
 		} else if (is("define")) {
