@@ -1,4 +1,4 @@
-package stmtnode.watch;
+package com.stmtnode.watch;
 
 import java.util.logging.Logger;
 

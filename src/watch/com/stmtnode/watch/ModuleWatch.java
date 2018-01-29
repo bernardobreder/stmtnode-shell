@@ -1,4 +1,4 @@
-package stmtnode.watch;
+package com.stmtnode.watch;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -18,9 +18,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import stmtnode.json.JsonObject;
-import stmtnode.module.ModuleData;
-import stmtnode.module.ModuleRoot;
+import com.stmtnode.json.JsonObject;
+import com.stmtnode.module.ModuleData;
+import com.stmtnode.module.ModuleRoot;
 
 public class ModuleWatch implements Runnable {
 

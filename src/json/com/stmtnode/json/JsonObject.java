@@ -1,4 +1,4 @@
-package stmtnode.json;
+package com.stmtnode.json;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

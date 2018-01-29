@@ -1,4 +1,4 @@
-package stmtnode.module;
+package com.stmtnode.module;
 
 import java.util.List;
 
