@@ -19,7 +19,7 @@ public class PreIncNode extends UnaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new PreIncNode(token, left.link(context)));
+		return cast(new PreIncNode(token, link(context, left)));
 	}
 
 	/**

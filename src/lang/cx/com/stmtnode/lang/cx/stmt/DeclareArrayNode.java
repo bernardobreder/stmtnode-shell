@@ -31,7 +31,7 @@ public class DeclareArrayNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new DeclareArrayNode(token, type.link(context), name, count.link(context)));
+		return cast(new DeclareArrayNode(token, link(context, type), name, link(context, count)));
 	}
 
 	/**

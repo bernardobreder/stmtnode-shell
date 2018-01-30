@@ -27,7 +27,7 @@ public class IfNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new IfNode(token, value.link(context), command.link(context)));
+		return cast(new IfNode(token, link(context, value), link(context, command)));
 	}
 
 	/**

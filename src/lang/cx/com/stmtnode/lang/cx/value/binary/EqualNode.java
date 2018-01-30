@@ -19,7 +19,7 @@ public class EqualNode extends BinaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new EqualNode(token, left.link(context), right.link(context)));
+		return cast(new EqualNode(token, link(context, left), link(context, right)));
 	}
 
 	/**

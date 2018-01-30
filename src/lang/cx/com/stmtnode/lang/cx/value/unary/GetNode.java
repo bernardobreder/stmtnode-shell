@@ -22,7 +22,7 @@ public class GetNode extends UnaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new GetNode(token, left.link(context), name));
+		return cast(new GetNode(token, link(context, left), name));
 	}
 
 	/**

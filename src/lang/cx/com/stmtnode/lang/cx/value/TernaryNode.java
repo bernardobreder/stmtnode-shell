@@ -27,7 +27,7 @@ public class TernaryNode extends ValueNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new TernaryNode(token, left.link(context), trueValue.link(context), falseValue.link(context)));
+		return cast(new TernaryNode(token, link(context, left), link(context, trueValue), link(context, falseValue)));
 	}
 
 	/**

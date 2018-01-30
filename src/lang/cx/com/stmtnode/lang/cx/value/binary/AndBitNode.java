@@ -19,7 +19,7 @@ public class AndBitNode extends BinaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new AndBitNode(token, left.link(context), right.link(context)));
+		return cast(new AndBitNode(token, link(context, left), link(context, right)));
 	}
 
 	/**

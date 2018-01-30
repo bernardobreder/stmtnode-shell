@@ -20,7 +20,7 @@ public class ExpNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new ExpNode(value.link(context)));
+		return cast(new ExpNode(link(context, value)));
 	}
 
 	/**

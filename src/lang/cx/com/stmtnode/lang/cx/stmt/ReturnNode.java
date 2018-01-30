@@ -24,7 +24,7 @@ public class ReturnNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new ReturnNode(token, value.link(context)));
+		return cast(new ReturnNode(token, link(context, value)));
 	}
 
 	/**

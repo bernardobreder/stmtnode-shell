@@ -22,7 +22,7 @@ public class SizeofNode extends ValueNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new SizeofNode(token, type.link(context)));
+		return cast(new SizeofNode(token, link(context, type)));
 	}
 
 	/**

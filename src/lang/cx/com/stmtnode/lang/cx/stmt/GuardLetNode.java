@@ -37,7 +37,7 @@ public class GuardLetNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new GuardLetNode(token, type.link(context), name, value.link(context), cond.link(context), command.link(context)));
+		return cast(new GuardLetNode(token, link(context, type), name, link(context, value), cond.link(context), link(context, command)));
 	}
 
 	/**

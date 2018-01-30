@@ -19,7 +19,7 @@ public class PreDecNode extends UnaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new PreDecNode(token, left.link(context)));
+		return cast(new PreDecNode(token, link(context, left)));
 	}
 
 	/**

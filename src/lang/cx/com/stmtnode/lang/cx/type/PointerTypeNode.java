@@ -17,7 +17,7 @@ public class PointerTypeNode extends WrapTypeNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new PointerTypeNode(type.link(context)));
+		return cast(new PointerTypeNode(link(context, type)));
 	}
 
 	/**

@@ -19,7 +19,7 @@ public class DivNode extends BinaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new DivNode(token, left.link(context), right.link(context)));
+		return cast(new DivNode(token, link(context, left), link(context, right)));
 	}
 
 	/**

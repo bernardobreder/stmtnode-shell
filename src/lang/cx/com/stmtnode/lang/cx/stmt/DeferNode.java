@@ -23,7 +23,7 @@ public class DeferNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new DeferNode(token, command.link(context)));
+		return cast(new DeferNode(token, link(context, command)));
 	}
 
 	/**

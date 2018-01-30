@@ -30,12 +30,16 @@ public abstract class Node {
 	 * @return nodes linked
 	 * @throws LinkException
 	 */
-	protected static <E extends Node> List<E> link(LinkContext context, List<E> list) throws LinkException {
+	protected static <E extends CodeNode> List<E> link(LinkContext context, List<E> list) throws LinkException {
 		List<E> result = new ArrayList<>(list.size());
 		for (int n = 0; n < list.size(); n++) {
-			result.add(cast(list.get(n).link(context)));
+			result.add(list.get(n).link(context));
 		}
 		return result;
+	}
+
+	protected static <E extends CodeNode> E link(LinkContext context, E node) throws LinkException {
+		return node == null ? null : node.link(context);
 	}
 
 }

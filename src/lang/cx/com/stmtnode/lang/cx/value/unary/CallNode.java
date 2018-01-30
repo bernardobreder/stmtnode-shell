@@ -24,7 +24,7 @@ public class CallNode extends UnaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new CallNode(token, left.link(context), link(context, arguments)));
+		return cast(new CallNode(token, link(context, left), link(context, arguments)));
 	}
 
 	/**

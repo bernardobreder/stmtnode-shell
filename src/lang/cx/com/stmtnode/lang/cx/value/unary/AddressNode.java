@@ -19,7 +19,7 @@ public class AddressNode extends UnaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new AddressNode(token, left.link(context)));
+		return cast(new AddressNode(token, link(context, left)));
 	}
 
 	/**

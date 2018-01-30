@@ -23,7 +23,7 @@ public class CastNode extends UnaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new CastNode(token, left.link(context), type.link(context)));
+		return cast(new CastNode(token, link(context, left), link(context, type)));
 	}
 
 	/**

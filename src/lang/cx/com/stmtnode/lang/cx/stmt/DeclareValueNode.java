@@ -31,7 +31,7 @@ public class DeclareValueNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new DeclareValueNode(token, type.link(context), name, value.link(context)));
+		return cast(new DeclareValueNode(token, link(context, type), name, link(context, value)));
 	}
 
 	/**

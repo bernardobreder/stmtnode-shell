@@ -16,6 +16,8 @@ import com.stmtnode.lang.cx.CxGrammar;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.head.UnitNode;
 import com.stmtnode.module.CodeNode;
+import com.stmtnode.module.LinkContext;
+import com.stmtnode.module.LinkException;
 import com.stmtnode.module.ModuleData;
 import com.stmtnode.module.ModuleRoot;
 import com.stmtnode.runner.RunnerProcess;
@@ -59,11 +61,12 @@ public class Main {
 		}
 	}
 
-	private CodeNode compile(Path path, String content) throws SyntaxException {
+	private CodeNode compile(Path path, String content) throws SyntaxException, LinkException {
 		String name = path.toFile().getName();
 		Token[] tokens = new Lexer(path.toString(), content).execute();
 		if (name.endsWith(".cx")) {
-			UnitNode unit = new CxGrammar(tokens).parseUnit();
+			LinkContext context = new LinkContext();
+			UnitNode unit = new CxGrammar(tokens).parseUnit().link(context);
 
 			SourceCodeOutput output = new SourceCodeOutput();
 			unit.writeToSource(output);

@@ -19,7 +19,7 @@ public class GreaterNode extends BinaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new GreaterNode(token, left.link(context), right.link(context)));
+		return cast(new GreaterNode(token, link(context, left), link(context, right)));
 	}
 
 	/**

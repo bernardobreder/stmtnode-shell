@@ -24,7 +24,7 @@ public class ArgumentDeclareNode extends HeadNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new ArgumentDeclareNode(name, type.link(context)));
+		return cast(new ArgumentDeclareNode(name, link(context, type)));
 	}
 
 	/**

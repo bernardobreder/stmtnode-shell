@@ -19,7 +19,7 @@ public class ModNode extends BinaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new ModNode(token, left.link(context), right.link(context)));
+		return cast(new ModNode(token, link(context, left), link(context, right)));
 	}
 
 	/**

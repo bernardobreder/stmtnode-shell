@@ -19,7 +19,7 @@ public class NotNode extends UnaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new NotNode(token, left.link(context)));
+		return cast(new NotNode(token, link(context, left)));
 	}
 
 	/**
