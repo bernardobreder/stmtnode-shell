@@ -544,8 +544,7 @@ public class CxGrammar extends Grammar {
 
 	protected ValueNode parseIdentifier() throws SyntaxException {
 		Token token = readIdentifier("expected identifier");
-		ValueNode left = new IdentifierNode(token);
-		return left;
+		return new IdentifierNode(token);
 	}
 
 	protected ValueNode parseGetCall(ValueNode left) throws SyntaxException {
