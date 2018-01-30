@@ -8,11 +8,14 @@
 
 func int main() {
     setbuf(stdout, 0)
+    
+    guard let int server_fd = socket(AF_INET, SOCK_STREAM, 0), server_fd >= 0 {
+        printf("Could create a socket\n")
+        return 1
+    } 
+    defer close(server_fd)
+    
     let int port = 8080 
-    let char str[100]
-    
-    let int server_fd = socket(AF_INET, SOCK_STREAM, 0)
-    
     let struct sockaddr_in server_ds
     memset(&server_ds, 0, sizeof(struct sockaddr_in))
     server_ds.sin_family = AF_INET 
@@ -33,27 +36,21 @@ func int main() {
     }
     
     printf("Server started at localhost:%d\n", port)
-
+    let char buffer[8 * 1024]
     while true {
         let struct sockaddr_in client
         let socklen_t client_len = sizeof(client)
         guard let int client_fd = accept(server_fd, (&client).cast(struct sockaddr*), &client_len), client_fd >= 0 {
             continue
         }
+        defer close(client_fd)
         
-        let char buffer[1024]
-        
-        if let ssize_t read = recv(client_fd, buffer, sizeof(buffer), 0), read <= 0 {
-            continue
-        }
+        if let ssize_t read = recv(client_fd, buffer, sizeof(buffer), 0), read <= 0 { continue }
         
         if let int err = send(client_fd, buffer, read, 0), err <= 0 {
             continue
-        }
-        
-        close(client_fd)    
+        }    
     }
     
-    close(server_fd)
     return 0
 }

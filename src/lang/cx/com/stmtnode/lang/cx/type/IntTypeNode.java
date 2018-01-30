@@ -29,7 +29,7 @@ public class IntTypeNode extends TypeNode {
 	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
-		output.write("int32_t");
+		output.write("int");
 	}
 
 }

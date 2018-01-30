@@ -36,7 +36,12 @@ public class FunctionNode extends HeadNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new FunctionNode(token, link(context, type), name, link(context, arguments), block.link(context)));
+		context.pushBlock();
+		try {
+			return cast(new FunctionNode(token, link(context, type), name, link(context, arguments), block.link(context)));
+		} finally {
+			context.popBlock();
+		}
 	}
 
 	/**

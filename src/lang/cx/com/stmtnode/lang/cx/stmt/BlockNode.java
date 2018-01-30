@@ -1,5 +1,6 @@
 package com.stmtnode.lang.cx.stmt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.stmtnode.lang.cx.CCodeOutput;
@@ -12,6 +13,8 @@ public class BlockNode extends StmtNode {
 
 	public final List<StmtNode> nodes;
 
+	public final List<StmtNode> dones = new ArrayList<>();
+
 	public BlockNode(List<StmtNode> nodes) {
 		this.nodes = nodes;
 	}
@@ -21,7 +24,16 @@ public class BlockNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new BlockNode(link(context, nodes)));
+		BlockNode node = new BlockNode(link(context, this.nodes));
+		for (StmtNode child : node.nodes) {
+			if (child instanceof ReturnNode) {
+				break;
+			} else if (child instanceof DeferNode) {
+				DeferNode deferNode = (DeferNode) child;
+				node.dones.add(deferNode.command);
+			}
+		}
+		return cast(node);
 	}
 
 	/**
@@ -50,6 +62,11 @@ public class BlockNode extends StmtNode {
 		output.incTab();
 		output.writeTab();
 		output.writeLines(nodes, e -> e.writeToC(output));
+		if (!dones.isEmpty()) {
+			output.writeLine();
+			output.writeTab();
+			output.writeLines(dones, e -> e.writeToC(output));
+		}
 		output.writeLine();
 		output.decTab();
 		output.writeTab();

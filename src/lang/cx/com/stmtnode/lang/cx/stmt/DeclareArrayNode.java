@@ -44,7 +44,7 @@ public class DeclareArrayNode extends StmtNode {
 		output.writeSpace();
 		output.write(name);
 		output.write("[");
-		output.write(count.token);
+		count.writeToSource(output);
 		output.write("]");
 	}
 
@@ -57,7 +57,7 @@ public class DeclareArrayNode extends StmtNode {
 		output.writeSpace();
 		output.write(name);
 		output.write("[");
-		output.write(count.token);
+		count.writeToC(output);
 		output.write("];");
 	}
 

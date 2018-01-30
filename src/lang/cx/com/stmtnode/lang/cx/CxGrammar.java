@@ -159,7 +159,7 @@ public class CxGrammar extends Grammar {
 		TypeNode type = parseType();
 		Token name = readIdentifier("expected name of variable");
 		if (can('[')) {
-			ValueNode count = parseNumber();
+			ValueNode count = parseValue();
 			read(']', "expected close array count");
 			return new DeclareArrayNode(token, type, name, count);
 		}
@@ -255,11 +255,11 @@ public class CxGrammar extends Grammar {
 			if (can(',')) {
 				cond = parseValue();
 			}
-			StmtNode command = parseCommand();
+			StmtNode command = parseBlock();
 			return new IfLetNode(token, type, name, value, cond, command);
 		} else {
 			ValueNode value = parseValue();
-			StmtNode command = parseCommand();
+			StmtNode command = parseBlock();
 			return new IfNode(token, value, command);
 		}
 	}
@@ -276,11 +276,11 @@ public class CxGrammar extends Grammar {
 			if (can(',')) {
 				cond = parseValue();
 			}
-			StmtNode command = parseCommand();
+			StmtNode command = parseBlock();
 			return new GuardLetNode(token, type, name, value, cond, command);
 		} else {
 			ValueNode value = parseValue();
-			StmtNode command = parseCommand();
+			StmtNode command = parseBlock();
 			return new GuardNode(token, value, command);
 		}
 	}
@@ -294,7 +294,7 @@ public class CxGrammar extends Grammar {
 	protected StmtNode parseWhile() throws SyntaxException {
 		Token token = read("while", "expected while keyword");
 		ValueNode value = parseValue();
-		StmtNode command = parseCommand();
+		StmtNode command = parseBlock();
 		return new WhileNode(token, value, command);
 	}
 

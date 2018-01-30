@@ -27,7 +27,12 @@ public class WhileNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new WhileNode(token, link(context, value), link(context, command)));
+		context.pushBlock();
+		try {
+			return cast(new WhileNode(token, link(context, value), link(context, command)));
+		} finally {
+			context.popBlock();
+		}
 	}
 
 	/**
