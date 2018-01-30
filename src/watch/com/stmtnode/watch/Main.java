@@ -24,6 +24,8 @@ public class Main {
 
 	static Log logger = new Log();
 
+	private RunnerProcess runner;
+
 	public Main() {
 		TaskQueue queue = new TaskQueue();
 		Path inDir = Paths.get("mod");
@@ -33,7 +35,6 @@ public class Main {
 
 	private void execute(ModuleRoot root) {
 		try {
-			System.out.println("Start reading...");
 			List<ModuleData> modules = root.modules;
 			for (ModuleData module : modules) {
 				Map<Path, CodeNode> codes = new HashMap<>();
@@ -45,6 +46,14 @@ public class Main {
 					}
 				}
 			}
+			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+				@Override
+				public void run() {
+					if (runner != null) {
+						runner.close();
+					}
+				}
+			}));
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -58,17 +67,17 @@ public class Main {
 
 			SourceCodeOutput output = new SourceCodeOutput();
 			unit.writeToSource(output);
-			// System.out.println(output.toString());
 
 			CCodeOutput coutput = new CCodeOutput();
 			unit.writeToC(coutput);
-			System.err.println(coutput.toString());
+			System.out.println(coutput.toString());
 
+			if (runner != null) {
+				runner.close();
+			}
 			try {
-				System.out.println("Start compiling...");
-				new RunnerProcess(coutput.toString());
+				runner = new RunnerProcess(coutput.toString());
 			} catch (IOException e) {
-				System.out.println("Error at compiling...");
 				System.err.println(e.getMessage());
 			}
 

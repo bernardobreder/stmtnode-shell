@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +16,21 @@ import com.stmtnode.lang.cx.head.IncludeSourceNode;
 import com.stmtnode.lang.cx.head.PathNode;
 import com.stmtnode.lang.cx.head.UnitNode;
 import com.stmtnode.lang.cx.stmt.BlockNode;
+import com.stmtnode.lang.cx.stmt.BreakNode;
+import com.stmtnode.lang.cx.stmt.ContinueNode;
 import com.stmtnode.lang.cx.stmt.DeclareArrayNode;
 import com.stmtnode.lang.cx.stmt.DeclareValueNode;
+import com.stmtnode.lang.cx.stmt.DeferNode;
 import com.stmtnode.lang.cx.stmt.ExpNode;
+import com.stmtnode.lang.cx.stmt.GuardLetNode;
+import com.stmtnode.lang.cx.stmt.GuardNode;
+import com.stmtnode.lang.cx.stmt.IfLetNode;
+import com.stmtnode.lang.cx.stmt.IfNode;
 import com.stmtnode.lang.cx.stmt.ReturnNode;
 import com.stmtnode.lang.cx.stmt.StmtNode;
+import com.stmtnode.lang.cx.stmt.WhileNode;
 import com.stmtnode.lang.cx.type.CharTypeNode;
+import com.stmtnode.lang.cx.type.IdTypeNode;
 import com.stmtnode.lang.cx.type.IntTypeNode;
 import com.stmtnode.lang.cx.type.PointerTypeNode;
 import com.stmtnode.lang.cx.type.StructTypeNode;
@@ -49,6 +61,7 @@ import com.stmtnode.lang.cx.value.binary.OrNode;
 import com.stmtnode.lang.cx.value.binary.RightShiftNode;
 import com.stmtnode.lang.cx.value.binary.SubNode;
 import com.stmtnode.lang.cx.value.binary.SumNode;
+import com.stmtnode.lang.cx.value.primitive.BooleanNode;
 import com.stmtnode.lang.cx.value.primitive.NumberNode;
 import com.stmtnode.lang.cx.value.primitive.StringNode;
 import com.stmtnode.lang.cx.value.unary.NotNode;
@@ -194,6 +207,9 @@ public class CxGrammar extends Grammar {
 		} else if (can("struct")) {
 			Token name = readIdentifier("expected name of type");
 			return new StructTypeNode(name);
+		} else if (isIdentifier()) {
+			Token name = readIdentifier("expected name of type");
+			return new IdTypeNode(name);
 		} else {
 			throw error("expected type");
 		}
@@ -208,10 +224,20 @@ public class CxGrammar extends Grammar {
 			return parseBlock();
 		} else if (is("if")) {
 			return parseIf();
+		} else if (is("while")) {
+			return parseWhile();
 		} else if (is("let")) {
 			return parseDeclare();
 		} else if (is("return")) {
 			return parseReturn();
+		} else if (is("continue")) {
+			return new ContinueNode(next());
+		} else if (is("break")) {
+			return new BreakNode(next());
+		} else if (is("defer")) {
+			return parseDefer();
+		} else if (is("guard")) {
+			return parseGuard();
 		} else {
 			return parseExpression();
 		}
@@ -219,9 +245,57 @@ public class CxGrammar extends Grammar {
 
 	protected StmtNode parseIf() throws SyntaxException {
 		Token token = read("if", "expected if keyword");
+		if (is("let")) {
+			token = token.join(next());
+			TypeNode type = parseType();
+			Token name = readIdentifier("expected name of variable");
+			read('=', "expected = symbol");
+			ValueNode value = parseValue();
+			ValueNode cond = null;
+			if (can(',')) {
+				cond = parseValue();
+			}
+			StmtNode command = parseCommand();
+			return new IfLetNode(token, type, name, value, cond, command);
+		} else {
+			ValueNode value = parseValue();
+			StmtNode command = parseCommand();
+			return new IfNode(token, value, command);
+		}
+	}
+
+	protected StmtNode parseGuard() throws SyntaxException {
+		Token token = read("guard", "expected guard keyword");
+		if (is("let")) {
+			token = token.join(next());
+			TypeNode type = parseType();
+			Token name = readIdentifier("expected name of variable");
+			read('=', "expected = symbol");
+			ValueNode value = parseValue();
+			ValueNode cond = null;
+			if (can(',')) {
+				cond = parseValue();
+			}
+			StmtNode command = parseCommand();
+			return new GuardLetNode(token, type, name, value, cond, command);
+		} else {
+			ValueNode value = parseValue();
+			StmtNode command = parseCommand();
+			return new GuardNode(token, value, command);
+		}
+	}
+
+	protected StmtNode parseDefer() throws SyntaxException {
+		Token token = read("defer", "expected defer keyword");
+		StmtNode command = parseCommand();
+		return new DeferNode(token, command);
+	}
+
+	protected StmtNode parseWhile() throws SyntaxException {
+		Token token = read("while", "expected while keyword");
 		ValueNode value = parseValue();
 		StmtNode command = parseCommand();
-		return null;
+		return new WhileNode(token, value, command);
 	}
 
 	protected StmtNode parseExpression() throws SyntaxException {
@@ -301,11 +375,11 @@ public class CxGrammar extends Grammar {
 				ValueNode right = parseSum();
 				left = new LowerEqualNode(token, left, right);
 			} else if (is('>')) {
-				Token token = next(2);
+				Token token = next();
 				ValueNode right = parseSum();
 				left = new GreaterNode(token, left, right);
 			} else if (is('<')) {
-				Token token = next(2);
+				Token token = next();
 				ValueNode right = parseSum();
 				left = new LowerNode(token, left, right);
 			} else {
@@ -423,6 +497,10 @@ public class CxGrammar extends Grammar {
 			return parseString();
 		} else if (isNumber()) {
 			return parseNumber();
+		} else if (is("true")) {
+			return new BooleanNode(next(), TRUE);
+		} else if (is("false")) {
+			return new BooleanNode(next(), FALSE);
 		} else if (isIdentifier()) {
 			return parseId();
 		} else {
@@ -454,13 +532,19 @@ public class CxGrammar extends Grammar {
 	}
 
 	protected ValueNode parseId() throws SyntaxException {
-		Token token = readIdentifier("expected identifier");
-		ValueNode left = new IdentifierNode(token);
+		ValueNode left = parseIdentifier();
 		left = parseGetCall(left);
 		while (is('=')) {
+			Token token = next();
 			ValueNode value = parseValue();
-			left = new AssignNode(left.token, left, value);
+			left = new AssignNode(token, left, value);
 		}
+		return left;
+	}
+
+	protected ValueNode parseIdentifier() throws SyntaxException {
+		Token token = readIdentifier("expected identifier");
+		ValueNode left = new IdentifierNode(token);
 		return left;
 	}
 

@@ -7,6 +7,53 @@
 #include <string.h>
 
 func int main() {
-    let int a = a + b * c * d + e 
+    setbuf(stdout, 0)
+    let int port = 8080 
+    let char str[100]
+    
+    let int server_fd = socket(AF_INET, SOCK_STREAM, 0)
+    
+    let struct sockaddr_in server_ds
+    memset(&server_ds, 0, sizeof(struct sockaddr_in))
+    server_ds.sin_family = AF_INET 
+    server_ds.sin_addr.s_addr = htons(INADDR_ANY)
+    server_ds.sin_port = htons(port)
+    
+    let int opt_val = 1
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof(int))
+    
+    if let int err = bind(server_fd, (&server_ds).cast(struct sockaddr*), sizeof(struct sockaddr_in)), err < 0 {
+        printf("Could not bind socket\n")
+        return 1
+    }
+
+    if let int err = listen(server_fd, 128), err < 0 {
+        printf("Could not listen on socket\n")
+        return 1
+    }
+    
+    printf("Server started at localhost:%d\n", port)
+
+    while true {
+        let struct sockaddr_in client
+        let socklen_t client_len = sizeof(client)
+        guard let int client_fd = accept(server_fd, (&client).cast(struct sockaddr*), &client_len), client_fd >= 0 {
+            continue
+        }
+        
+        let char buffer[1024]
+        
+        if let ssize_t read = recv(client_fd, buffer, sizeof(buffer), 0), read <= 0 {
+            continue
+        }
+        
+        if let int err = send(client_fd, buffer, read, 0), err <= 0 {
+            continue
+        }
+        
+        close(client_fd)    
+    }
+    
+    close(server_fd)
     return 0
 }

@@ -3,8 +3,8 @@ package com.stmtnode.module;
 public abstract class Node {
 
 	/**
-	 * Realiza as ligações do objeto e retorna um novo caso seja necessário
-	 * 
+	 * Realiza as ligaÃ§Ãµes do objeto e retorna um novo caso seja necessÃ¡rio
+	 *
 	 * @param <E>
 	 * @param context
 	 * @return
