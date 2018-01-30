@@ -31,6 +31,8 @@ public class UnitNode extends HeadNode {
 	@Override
 	public void writeToC(CCodeOutput output) {
 		output.writeLines(includes, e -> e.writeToC(output));
+		output.writeLine();
+		output.writeLine();
 		output.writeLines(nodes, e -> e.writeToC(output));
 	}
 

@@ -16,6 +16,7 @@ import com.stmtnode.lang.cx.stmt.BlockNode;
 import com.stmtnode.lang.cx.stmt.DeclareArrayNode;
 import com.stmtnode.lang.cx.stmt.DeclareValueNode;
 import com.stmtnode.lang.cx.stmt.ExpNode;
+import com.stmtnode.lang.cx.stmt.ReturnNode;
 import com.stmtnode.lang.cx.stmt.StmtNode;
 import com.stmtnode.lang.cx.type.CharTypeNode;
 import com.stmtnode.lang.cx.type.IntTypeNode;
@@ -28,11 +29,33 @@ import com.stmtnode.lang.cx.value.CallNode;
 import com.stmtnode.lang.cx.value.CastNode;
 import com.stmtnode.lang.cx.value.GetNode;
 import com.stmtnode.lang.cx.value.IdentifierNode;
-import com.stmtnode.lang.cx.value.NotNode;
-import com.stmtnode.lang.cx.value.NumberNode;
 import com.stmtnode.lang.cx.value.SizeofNode;
-import com.stmtnode.lang.cx.value.StringNode;
+import com.stmtnode.lang.cx.value.TernaryNode;
 import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.value.binary.AndBitNode;
+import com.stmtnode.lang.cx.value.binary.AndNode;
+import com.stmtnode.lang.cx.value.binary.DivNode;
+import com.stmtnode.lang.cx.value.binary.EqualNode;
+import com.stmtnode.lang.cx.value.binary.GreaterEqualNode;
+import com.stmtnode.lang.cx.value.binary.GreaterNode;
+import com.stmtnode.lang.cx.value.binary.LeftShiftNode;
+import com.stmtnode.lang.cx.value.binary.LowerEqualNode;
+import com.stmtnode.lang.cx.value.binary.LowerNode;
+import com.stmtnode.lang.cx.value.binary.ModNode;
+import com.stmtnode.lang.cx.value.binary.MulNode;
+import com.stmtnode.lang.cx.value.binary.NotEqualNode;
+import com.stmtnode.lang.cx.value.binary.OrBitNode;
+import com.stmtnode.lang.cx.value.binary.OrNode;
+import com.stmtnode.lang.cx.value.binary.RightShiftNode;
+import com.stmtnode.lang.cx.value.binary.SubNode;
+import com.stmtnode.lang.cx.value.binary.SumNode;
+import com.stmtnode.lang.cx.value.primitive.NumberNode;
+import com.stmtnode.lang.cx.value.primitive.StringNode;
+import com.stmtnode.lang.cx.value.unary.NotNode;
+import com.stmtnode.lang.cx.value.unary.PosDecNode;
+import com.stmtnode.lang.cx.value.unary.PosIncNode;
+import com.stmtnode.lang.cx.value.unary.PreDecNode;
+import com.stmtnode.lang.cx.value.unary.PreIncNode;
 
 public class CxGrammar extends Grammar {
 
@@ -134,6 +157,12 @@ public class CxGrammar extends Grammar {
 		return new DeclareValueNode(token, type, name, value);
 	}
 
+	protected StmtNode parseReturn() throws SyntaxException {
+		Token token = read("return", "expected return keyword");
+		ValueNode value = parseValue();
+		return new ReturnNode(token, value);
+	}
+
 	protected FunctionNode parseFunction() throws SyntaxException {
 		Token token = read("func", "expected func keyword");
 		TypeNode type = parseType();
@@ -175,17 +204,23 @@ public class CxGrammar extends Grammar {
 	}
 
 	protected StmtNode parseCommand() throws SyntaxException {
-		if (is("if")) {
+		if (is('{')) {
+			return parseBlock();
+		} else if (is("if")) {
 			return parseIf();
 		} else if (is("let")) {
 			return parseDeclare();
+		} else if (is("return")) {
+			return parseReturn();
 		} else {
 			return parseExpression();
 		}
 	}
 
 	protected StmtNode parseIf() throws SyntaxException {
-		// TODO Auto-generated method stub
+		Token token = read("if", "expected if keyword");
+		ValueNode value = parseValue();
+		StmtNode command = parseCommand();
 		return null;
 	}
 
@@ -199,27 +234,147 @@ public class CxGrammar extends Grammar {
 	}
 
 	protected ValueNode parseTernary() throws SyntaxException {
-		return parseOr();
+		ValueNode left = parseOr();
+		if (is('?')) {
+			Token token = next();
+			ValueNode trueValue = parseOr();
+			read(':', "expected else ternary");
+			ValueNode falseValue = parseOr();
+			left = new TernaryNode(token, left, trueValue, falseValue);
+		}
+		return left;
 	}
 
 	protected ValueNode parseOr() throws SyntaxException {
-		return parseAnd();
+		ValueNode left = parseAnd();
+		while (is("or") || is("orbit")) {
+			if (is("or")) {
+				Token token = next();
+				ValueNode right = parseAnd();
+				left = new OrNode(token, left, right);
+			} else if (is("orbit")) {
+				Token token = next();
+				ValueNode right = parseBit();
+				left = new OrBitNode(token, left, right);
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+		return left;
 	}
 
 	protected ValueNode parseAnd() throws SyntaxException {
-		return parseCompare();
+		ValueNode left = parseCompare();
+		while (is("and") || is("andbit")) {
+			if (is("and")) {
+				Token token = next();
+				ValueNode right = parseCompare();
+				left = new AndNode(token, left, right);
+			} else if (is("andbit")) {
+				Token token = next();
+				ValueNode right = parseBit();
+				left = new AndBitNode(token, left, right);
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+		return left;
 	}
 
 	protected ValueNode parseCompare() throws SyntaxException {
-		return parseSum();
+		ValueNode left = parseSum();
+		while (is('=', '=') || is('!', '=') || is('>') || is('<')) {
+			if (is('=', '=')) {
+				Token token = next(2);
+				ValueNode right = parseSum();
+				left = new EqualNode(token, left, right);
+			} else if (is('!', '=')) {
+				Token token = next(2);
+				ValueNode right = parseSum();
+				left = new NotEqualNode(token, left, right);
+			} else if (is('>', '=')) {
+				Token token = next(2);
+				ValueNode right = parseSum();
+				left = new GreaterEqualNode(token, left, right);
+			} else if (is('<', '=')) {
+				Token token = next(2);
+				ValueNode right = parseSum();
+				left = new LowerEqualNode(token, left, right);
+			} else if (is('>')) {
+				Token token = next(2);
+				ValueNode right = parseSum();
+				left = new GreaterNode(token, left, right);
+			} else if (is('<')) {
+				Token token = next(2);
+				ValueNode right = parseSum();
+				left = new LowerNode(token, left, right);
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+		return left;
 	}
 
 	protected ValueNode parseSum() throws SyntaxException {
-		return parseMul();
+		ValueNode left = parseMul();
+		while (is('+') || is('-')) {
+			if (is('+')) {
+				Token token = next();
+				ValueNode right = parseMul();
+				left = new SumNode(token, left, right);
+			} else if (is('-')) {
+				Token token = next();
+				ValueNode right = parseMul();
+				left = new SubNode(token, left, right);
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+		return left;
 	}
 
 	protected ValueNode parseMul() throws SyntaxException {
-		return parseUnary();
+		ValueNode left = parseBit();
+		while (is('*') || is('/') || is("mod")) {
+			if (is('*')) {
+				Token token = next();
+				ValueNode right = parseBit();
+				left = new MulNode(token, left, right);
+			} else if (is('/')) {
+				Token token = next();
+				ValueNode right = parseBit();
+				left = new DivNode(token, left, right);
+			} else if (is("mod")) {
+				Token token = next();
+				ValueNode right = parseBit();
+				left = new ModNode(token, left, right);
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+		return left;
+	}
+
+	protected ValueNode parseBit() throws SyntaxException {
+		ValueNode left = parseUnary();
+		while (is("lshift") || is("rshift") || is("andbit") || is("orbit")) {
+			if (is("lshift")) {
+				Token token = next();
+				ValueNode right = parseBit();
+				left = new LeftShiftNode(token, left, right);
+			} else if (is("rshift")) {
+				Token token = next();
+				ValueNode right = parseBit();
+				left = new RightShiftNode(token, left, right);
+			} else if (is("andbit")) {
+				Token token = next();
+				ValueNode right = parseBit();
+				left = new AndBitNode(token, left, right);
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+		return left;
 	}
 
 	protected ValueNode parseUnary() throws SyntaxException {
@@ -227,8 +382,23 @@ public class CxGrammar extends Grammar {
 			return parseNot();
 		} else if (is('&')) {
 			return parseAddress();
+		} else if (is('+', '+')) {
+			Token token = next(2);
+			ValueNode left = parseLiteral();
+			return new PreIncNode(token, left);
+		} else if (is('-', '-')) {
+			Token token = next(2);
+			ValueNode left = parseLiteral();
+			return new PreDecNode(token, left);
 		}
 		ValueNode left = parseLiteral();
+		if (is('+', '+')) {
+			Token token = next(2);
+			return new PosIncNode(token, left);
+		} else if (is('-', '-')) {
+			Token token = next(2);
+			return new PosDecNode(token, left);
+		}
 		return left;
 	}
 
@@ -286,11 +456,16 @@ public class CxGrammar extends Grammar {
 	protected ValueNode parseId() throws SyntaxException {
 		Token token = readIdentifier("expected identifier");
 		ValueNode left = new IdentifierNode(token);
-		return parseGetCall(left);
+		left = parseGetCall(left);
+		while (is('=')) {
+			ValueNode value = parseValue();
+			left = new AssignNode(left.token, left, value);
+		}
+		return left;
 	}
 
 	protected ValueNode parseGetCall(ValueNode left) throws SyntaxException {
-		while (is('(') || is('.') || is('=')) {
+		while (is('(') || is('.')) {
 			if (is('(')) {
 				List<ValueNode> arguments = readNodes('(', "expected open parameter", ')', "expected close parameter", ',', this::parseValue);
 				left = new CallNode(left.token, left, arguments);
@@ -304,9 +479,6 @@ public class CxGrammar extends Grammar {
 					Token name = readIdentifier("expected name of field or function");
 					left = new GetNode(name, left, name);
 				}
-			} else if (can('=')) {
-				ValueNode value = parseValue();
-				left = new AssignNode(left.token, left, value);
 			}
 		}
 		return left;

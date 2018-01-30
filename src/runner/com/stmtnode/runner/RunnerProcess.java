@@ -24,12 +24,17 @@ public class RunnerProcess {
 		try {
 			Files.write(file.toPath(), content.getBytes(UTF_8), WRITE, TRUNCATE_EXISTING, CREATE);
 			Process buildProcess = new ProcessBuilder("gcc", file.getAbsolutePath(), "-o", execFile.getAbsolutePath()).start();
-			ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>();
-			if (execute(queue, buildProcess) == 0) {
+			ConcurrentLinkedQueue<String> buildQueue = new ConcurrentLinkedQueue<>();
+			if (execute(buildProcess, buildQueue) == 0) {
 				Process execProcess = new ProcessBuilder(execFile.getAbsolutePath()).start();
-				execProcess.waitFor();
+				ConcurrentLinkedQueue<String> execQueue = new ConcurrentLinkedQueue<>();
+				int execExitCode = execute(execProcess, execQueue);
+				System.out.println("Finished execution: " + execExitCode);
+				if (!execQueue.isEmpty()) {
+					System.out.println(execQueue.stream().collect(joining("\n")));
+				}
 			} else {
-				throw new IOException(queue.stream().collect(joining("\n")));
+				throw new IOException(buildQueue.stream().collect(joining("\n")));
 			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
@@ -39,12 +44,12 @@ public class RunnerProcess {
 		}
 	}
 
-	protected int execute(ConcurrentLinkedQueue<String> queue, Process buildProcess) throws InterruptedException {
-		Thread errThread = read(buildProcess, "Build-C-Error-Reader", queue, buildProcess.getErrorStream());
-		Thread inThread = read(buildProcess, "Build-C-Input-Reader", queue, buildProcess.getInputStream());
+	protected int execute(Process process, ConcurrentLinkedQueue<String> queue) throws InterruptedException {
+		Thread errThread = read(process, "Build-C-Error-Reader", queue, process.getErrorStream());
+		Thread inThread = read(process, "Build-C-Input-Reader", queue, process.getInputStream());
 		errThread.join();
 		inThread.join();
-		return buildProcess.waitFor();
+		return process.waitFor();
 	}
 
 	protected Thread read(Process process, String name, Queue<String> queue, InputStream input) {

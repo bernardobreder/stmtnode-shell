@@ -1,16 +1,14 @@
-package com.stmtnode.lang.cx.value;
+package com.stmtnode.lang.cx.value.binary;
 
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
+import com.stmtnode.lang.cx.value.ValueNode;
 
-public class NotNode extends ValueNode {
+public class MulNode extends BinaryNode {
 
-	public final ValueNode left;
-
-	public NotNode(Token token, ValueNode left) {
-		super(token);
-		this.left = left;
+	public MulNode(Token token, ValueNode left, ValueNode right) {
+		super(token, left, right);
 	}
 
 	/**
@@ -18,8 +16,9 @@ public class NotNode extends ValueNode {
 	 */
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
-		output.write("!");
 		left.writeToSource(output);
+		output.write(" * ");
+		right.writeToSource(output);
 	}
 
 	/**
@@ -27,8 +26,11 @@ public class NotNode extends ValueNode {
 	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
-		output.write("!");
+		output.write("(");
 		left.writeToC(output);
+		output.write(") * (");
+		right.writeToC(output);
+		output.write(")");
 	}
 
 }

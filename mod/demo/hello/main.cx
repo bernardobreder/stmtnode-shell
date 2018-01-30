@@ -7,21 +7,6 @@
 #include <string.h>
 
 func int main() {
-    let char str[100]
-    let int err
-    let int server_fd = socket(AF_INET, SOCK_STREAM, 0)
-    memset(server_fd, 0, sizeof(struct sockaddr_in))
-    
-    server_fd.sin_family = AF_INET
-    server_fd.sin_addr.s_addr = htons(INADDR_ANY)
-    server_fd.sin_port = htons(8080)
-    
-    let int opt_val = 1
-    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof(int))
-    
-    err = bind(server_fd, (&server).cast(struct sockaddr*), sizeof(struct sockaddr_in))
-    //if (err < 0) on_error("Could not bind socket\n")
-
-    err = listen(server_fd, 128)
-    //if (err < 0) on_error("Could not listen on socket\n")
+    let int a = a + b * c * d + e 
+    return 0
 }

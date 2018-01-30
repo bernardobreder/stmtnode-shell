@@ -1,13 +1,14 @@
-package com.stmtnode.lang.cx.value;
+package com.stmtnode.lang.cx.value.unary;
 
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
+import com.stmtnode.lang.cx.value.ValueNode;
 
-public class StringNode extends ValueNode {
+public class PreDecNode extends UnaryNode {
 
-	public StringNode(Token token) {
-		super(token);
+	public PreDecNode(Token token, ValueNode left) {
+		super(token, left);
 	}
 
 	/**
@@ -15,7 +16,8 @@ public class StringNode extends ValueNode {
 	 */
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
-		output.write(token);
+		output.write("--");
+		left.writeToSource(output);
 	}
 
 	/**
@@ -23,7 +25,8 @@ public class StringNode extends ValueNode {
 	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
-		output.write(token);
+		output.write("--");
+		left.writeToC(output);
 	}
 
 }

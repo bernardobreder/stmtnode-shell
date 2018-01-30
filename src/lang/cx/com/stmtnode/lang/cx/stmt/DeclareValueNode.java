@@ -49,8 +49,8 @@ public class DeclareValueNode extends StmtNode {
 		if (value != null) {
 			output.write(" = ");
 			value.writeToC(output);
-			output.write(";");
 		}
+		output.write(";");
 	}
 
 }
