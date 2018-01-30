@@ -1,4 +1,4 @@
-package com.stmtnode.lang.cx.stmt;
+package com.stmtnode.lang.cx.value.binary;
 
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
@@ -8,15 +8,10 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class ReturnNode extends StmtNode {
+public class AssignNode extends BinaryNode {
 
-	public final Token token;
-
-	public final ValueNode value;
-
-	public ReturnNode(Token token, ValueNode value) {
-		this.token = token;
-		this.value = value;
+	public AssignNode(Token token, ValueNode left, ValueNode right) {
+		super(token, left, right);
 	}
 
 	/**
@@ -24,7 +19,7 @@ public class ReturnNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new ReturnNode(token, value.link(context)));
+		return cast(new AssignNode(token, left.link(context), right.link(context)));
 	}
 
 	/**
@@ -32,8 +27,9 @@ public class ReturnNode extends StmtNode {
 	 */
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
-		output.write("return ");
-		value.writeToSource(output);
+		left.writeToSource(output);
+		output.write(" = ");
+		right.writeToSource(output);
 	}
 
 	/**
@@ -41,9 +37,9 @@ public class ReturnNode extends StmtNode {
 	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
-		output.write("return ");
-		value.writeToC(output);
-		output.write(";");
+		left.writeToC(output);
+		output.write(" = ");
+		right.writeToC(output);
 	}
 
 }

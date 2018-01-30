@@ -7,6 +7,9 @@ import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.stmt.BlockNode;
 import com.stmtnode.lang.cx.type.TypeNode;
+import com.stmtnode.module.CodeNode;
+import com.stmtnode.module.LinkContext;
+import com.stmtnode.module.LinkException;
 
 public class FunctionNode extends HeadNode {
 
@@ -26,6 +29,14 @@ public class FunctionNode extends HeadNode {
 		this.name = name;
 		this.arguments = arguments;
 		this.block = block;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
+		return cast(new FunctionNode(token, type.link(context), name, link(context, arguments), block.link(context)));
 	}
 
 	/**

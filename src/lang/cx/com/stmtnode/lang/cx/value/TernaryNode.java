@@ -3,6 +3,9 @@ package com.stmtnode.lang.cx.value;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
+import com.stmtnode.module.CodeNode;
+import com.stmtnode.module.LinkContext;
+import com.stmtnode.module.LinkException;
 
 public class TernaryNode extends ValueNode {
 
@@ -17,6 +20,14 @@ public class TernaryNode extends ValueNode {
 		this.left = left;
 		this.trueValue = trueValue;
 		this.falseValue = falseValue;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
+		return cast(new TernaryNode(token, left.link(context), trueValue.link(context), falseValue.link(context)));
 	}
 
 	/**

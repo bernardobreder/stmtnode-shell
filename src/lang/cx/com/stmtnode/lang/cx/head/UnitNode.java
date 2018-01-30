@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
+import com.stmtnode.module.CodeNode;
+import com.stmtnode.module.LinkContext;
+import com.stmtnode.module.LinkException;
 
 public class UnitNode extends HeadNode {
 
@@ -14,6 +17,14 @@ public class UnitNode extends HeadNode {
 	public UnitNode(List<HeadNode> includes, List<HeadNode> nodes) {
 		this.includes = includes;
 		this.nodes = nodes;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
+		return cast(new UnitNode(link(context, includes), link(context, nodes)));
 	}
 
 	/**

@@ -4,14 +4,22 @@ import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.module.CodeNode;
+import com.stmtnode.module.LinkContext;
+import com.stmtnode.module.LinkException;
 
-public class NotNode extends ValueNode {
-
-	public final ValueNode left;
+public class NotNode extends UnaryNode {
 
 	public NotNode(Token token, ValueNode left) {
-		super(token);
-		this.left = left;
+		super(token, left);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
+		return cast(new NotNode(token, left.link(context)));
 	}
 
 	/**

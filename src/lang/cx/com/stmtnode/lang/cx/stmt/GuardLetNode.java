@@ -5,6 +5,9 @@ import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.type.TypeNode;
 import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.module.CodeNode;
+import com.stmtnode.module.LinkContext;
+import com.stmtnode.module.LinkException;
 
 public class GuardLetNode extends StmtNode {
 
@@ -27,6 +30,14 @@ public class GuardLetNode extends StmtNode {
 		this.value = value;
 		this.cond = cond;
 		this.command = command;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
+		return cast(new GuardLetNode(token, type.link(context), name, value.link(context), cond.link(context), command.link(context)));
 	}
 
 	/**
