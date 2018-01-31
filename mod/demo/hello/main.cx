@@ -45,7 +45,7 @@ func int main() {
         }
         defer close(client_fd)
         
-        if let ssize_t read = recv(client_fd, buffer, sizeof(buffer), 0), read <= 0 { continue }
+        guard let ssize_t read = recv(client_fd, buffer, sizeof(buffer), 0), read > 0 { continue }
         
         if let int err = send(client_fd, buffer, read, 0), err <= 0 {
             continue

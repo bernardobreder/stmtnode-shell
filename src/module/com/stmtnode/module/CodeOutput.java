@@ -15,8 +15,9 @@ public class CodeOutput {
 		write(" ");
 	}
 
-	public void write(String text) {
+	public CodeOutput write(String text) {
 		sb.append(text);
+		return this;
 	}
 
 	public void write(Token token) {

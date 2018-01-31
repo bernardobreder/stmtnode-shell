@@ -1,0 +1,16 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct arraylist_t {
+    void** data
+    int size
+    int max
+}
+
+func struct arraylist_t* arraylist_new() {
+    guard let struct arraylist_t* self = malloc(sizeof(struct arraylist_t)).cast(struct arraylist_t*), self { return 0 }
+    defer free(self)
+    self.data = malloc(sizeof(void*) * self.max).cast(void**)
+    return self
+}

@@ -14,6 +14,8 @@ import com.stmtnode.lang.cx.head.HeadNode;
 import com.stmtnode.lang.cx.head.IncludeLibraryNode;
 import com.stmtnode.lang.cx.head.IncludeSourceNode;
 import com.stmtnode.lang.cx.head.PathNode;
+import com.stmtnode.lang.cx.head.StructFieldNode;
+import com.stmtnode.lang.cx.head.StructNode;
 import com.stmtnode.lang.cx.head.UnitNode;
 import com.stmtnode.lang.cx.stmt.BlockNode;
 import com.stmtnode.lang.cx.stmt.BreakNode;
@@ -142,6 +144,8 @@ public class CxGrammar extends Grammar {
 	protected HeadNode parseUnitItem() throws SyntaxException {
 		if (is("func")) {
 			return parseFunction();
+		} else if (is("struct")) {
+			return parseStruct();
 		} else if (is("let")) {
 			return parseDeclareStatic();
 		} else {
@@ -152,6 +156,23 @@ public class CxGrammar extends Grammar {
 	protected HeadNode parseDeclareStatic() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	protected HeadNode parseStruct() throws SyntaxException {
+		Token token = read("struct", "expected struct keyword");
+		Token name = readIdentifier("expected name of struct");
+		read('{', "expected open struct");
+		List<StructFieldNode> nodes = new ArrayList<>();
+		while (!can('}')) {
+			nodes.add(parseStructField(nodes));
+		}
+		return new StructNode(token, name, nodes);
+	}
+
+	protected StructFieldNode parseStructField(List<StructFieldNode> nodes) throws SyntaxException {
+		TypeNode type = parseType();
+		Token name = readIdentifier("expected name of field");
+		return new StructFieldNode(name, type);
 	}
 
 	protected StmtNode parseDeclare() throws SyntaxException {
