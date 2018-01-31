@@ -9,26 +9,26 @@ import java.util.List;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class ReturnNode extends StmtNode {
+public class ReturnNode extends StmtCxNode {
 
 	public final Token token;
 
-	public final ValueNode value;
+	public final ValueCxNode value;
 
-	public final List<StmtNode> dones;
+	public final List<StmtCxNode> dones;
 
-	public ReturnNode(Token token, ValueNode value) {
+	public ReturnNode(Token token, ValueCxNode value) {
 		this.token = token;
 		this.value = value;
 		this.dones = new ArrayList<>();
 	}
 
-	public ReturnNode(Token token, ValueNode value, List<StmtNode> dones) {
+	public ReturnNode(Token token, ValueCxNode value, List<StmtCxNode> dones) {
 		this.token = token;
 		this.value = value;
 		this.dones = dones;
@@ -39,7 +39,7 @@ public class ReturnNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		List<StmtNode> dones = context.peekFunction();
+		List<StmtCxNode> dones = context.peekFunction();
 		return cast(new ReturnNode(token, linkNode(context, value), dones));
 	}
 

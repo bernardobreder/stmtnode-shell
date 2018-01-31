@@ -6,18 +6,18 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.type.TypeNode;
+import com.stmtnode.lang.cx.type.TypeCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class ArgumentDeclareNode extends HeadNode {
+public class ArgumentDeclareCxNode extends HeadCxNode {
 
 	public final Token name;
 
-	public final TypeNode type;
+	public final TypeCxNode type;
 
-	public ArgumentDeclareNode(Token name, TypeNode type) {
+	public ArgumentDeclareCxNode(Token name, TypeCxNode type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -27,7 +27,7 @@ public class ArgumentDeclareNode extends HeadNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new ArgumentDeclareNode(name, linkNode(context, type)));
+		return cast(new ArgumentDeclareCxNode(name, linkNode(context, type)));
 	}
 
 	/**

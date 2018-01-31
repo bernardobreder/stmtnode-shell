@@ -10,13 +10,13 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class DeferNode extends StmtNode {
+public class DeferNode extends StmtCxNode {
 
 	public final Token token;
 
-	public final StmtNode command;
+	public final StmtCxNode command;
 
-	public DeferNode(Token token, StmtNode command) {
+	public DeferNode(Token token, StmtCxNode command) {
 		this.token = token;
 		this.command = command;
 	}
@@ -26,7 +26,7 @@ public class DeferNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		StmtNode command = linkNode(context, this.command);
+		StmtCxNode command = linkNode(context, this.command);
 		context.addBlock(command);
 		return cast(new DeferNode(token, command));
 	}

@@ -9,7 +9,7 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class IncludeSourceNode extends HeadNode {
+public class IncludeSourceNode extends HeadCxNode {
 
 	public final Token path;
 

@@ -12,13 +12,13 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class BlockNode extends StmtNode {
+public class BlockNode extends StmtCxNode {
 
-	public final List<StmtNode> nodes;
+	public final List<StmtCxNode> nodes;
 
-	public final List<StmtNode> dones = new ArrayList<>();
+	public final List<StmtCxNode> dones = new ArrayList<>();
 
-	public BlockNode(List<StmtNode> nodes) {
+	public BlockNode(List<StmtCxNode> nodes) {
 		this.nodes = nodes;
 	}
 
@@ -28,7 +28,7 @@ public class BlockNode extends StmtNode {
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
 		BlockNode node = new BlockNode(linkNodes(context, this.nodes));
-		for (StmtNode child : node.nodes) {
+		for (StmtCxNode child : node.nodes) {
 			if (child instanceof ReturnNode) {
 				break;
 			} else if (child instanceof DeferNode) {

@@ -8,7 +8,7 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class IncludeLibraryNode extends HeadNode {
+public class IncludeLibraryNode extends HeadCxNode {
 
 	public final PathNode path;
 

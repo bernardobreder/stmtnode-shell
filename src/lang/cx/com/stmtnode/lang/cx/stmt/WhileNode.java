@@ -6,20 +6,20 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class WhileNode extends StmtNode {
+public class WhileNode extends StmtCxNode {
 
 	public final Token token;
 
-	public final ValueNode value;
+	public final ValueCxNode value;
 
-	public final StmtNode command;
+	public final StmtCxNode command;
 
-	public WhileNode(Token token, ValueNode value, StmtNode command) {
+	public WhileNode(Token token, ValueCxNode value, StmtCxNode command) {
 		this.token = token;
 		this.value = value;
 		this.command = command;

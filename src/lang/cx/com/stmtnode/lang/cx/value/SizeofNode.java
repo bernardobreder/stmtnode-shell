@@ -6,16 +6,16 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.type.TypeNode;
+import com.stmtnode.lang.cx.type.TypeCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class SizeofNode extends ValueNode {
+public class SizeofNode extends ValueCxNode {
 
-	public final TypeNode type;
+	public final TypeCxNode type;
 
-	public SizeofNode(Token token, TypeNode type) {
+	public SizeofNode(Token token, TypeCxNode type) {
 		super(token);
 		this.type = type;
 	}

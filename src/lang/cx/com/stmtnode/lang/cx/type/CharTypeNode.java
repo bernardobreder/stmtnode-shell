@@ -8,7 +8,7 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class CharTypeNode extends TypeNode {
+public class CharTypeNode extends TypeCxNode {
 
 	/**
 	 * {@inheritDoc}

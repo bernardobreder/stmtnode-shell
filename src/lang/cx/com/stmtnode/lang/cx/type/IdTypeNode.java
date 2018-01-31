@@ -9,7 +9,7 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class IdTypeNode extends TypeNode {
+public class IdTypeNode extends TypeCxNode {
 
 	public final Token name;
 

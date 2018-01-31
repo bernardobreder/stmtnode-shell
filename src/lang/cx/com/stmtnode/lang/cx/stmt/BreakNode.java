@@ -12,18 +12,18 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class BreakNode extends StmtNode {
+public class BreakNode extends StmtCxNode {
 
 	public final Token token;
 
-	public final List<StmtNode> dones;
+	public final List<StmtCxNode> dones;
 
 	public BreakNode(Token token) {
 		this.token = token;
 		this.dones = new ArrayList<>();
 	}
 
-	public BreakNode(Token token, List<StmtNode> dones) {
+	public BreakNode(Token token, List<StmtCxNode> dones) {
 		this.token = token;
 		this.dones = dones;
 	}
@@ -33,7 +33,7 @@ public class BreakNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		List<StmtNode> dones = context.peekBlock();
+		List<StmtCxNode> dones = context.peekBlock();
 		return cast(new BreakNode(token, dones));
 	}
 

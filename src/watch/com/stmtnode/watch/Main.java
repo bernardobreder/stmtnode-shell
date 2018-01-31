@@ -17,7 +17,7 @@ import com.stmtnode.lang.compiler.Lexer;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.CxGrammar;
-import com.stmtnode.lang.cx.head.HeadNode;
+import com.stmtnode.lang.cx.head.HeadCxNode;
 import com.stmtnode.lang.cx.head.IncludeLibraryNode;
 import com.stmtnode.lang.cx.head.IncludeSourceNode;
 import com.stmtnode.lang.cx.head.UnitNode;
@@ -77,7 +77,7 @@ public class Main {
 				}
 			}
 			for (UnitNode unit : codes) {
-				for (HeadNode node : unit.nodes) {
+				for (HeadCxNode node : unit.nodes) {
 					node.writeToC(coutput);
 					coutput.writeLine();
 				}

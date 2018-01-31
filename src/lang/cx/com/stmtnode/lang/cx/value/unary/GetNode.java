@@ -6,7 +6,7 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
@@ -15,7 +15,7 @@ public class GetNode extends UnaryNode {
 
 	public final Token name;
 
-	public GetNode(Token token, ValueNode left, Token name) {
+	public GetNode(Token token, ValueCxNode left, Token name) {
 		super(token, left);
 		this.name = name;
 	}

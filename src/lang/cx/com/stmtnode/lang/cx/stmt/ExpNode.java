@@ -5,16 +5,16 @@ import static com.stmtnode.module.Nodes.linkNode;
 
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class ExpNode extends StmtNode {
+public class ExpNode extends StmtCxNode {
 
-	public final ValueNode value;
+	public final ValueCxNode value;
 
-	public ExpNode(ValueNode value) {
+	public ExpNode(ValueCxNode value) {
 		this.value = value;
 	}
 

@@ -6,27 +6,27 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.type.TypeNode;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.type.TypeCxNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class IfLetNode extends StmtNode {
+public class IfLetNode extends StmtCxNode {
 
 	public final Token token;
 
-	public final TypeNode type;
+	public final TypeCxNode type;
 
 	public final Token name;
 
-	public final ValueNode value;
+	public final ValueCxNode value;
 
-	public final ValueNode cond;
+	public final ValueCxNode cond;
 
-	public final StmtNode command;
+	public final StmtCxNode command;
 
-	public IfLetNode(Token token, TypeNode type, Token name, ValueNode value, ValueNode cond, StmtNode command) {
+	public IfLetNode(Token token, TypeCxNode type, Token name, ValueCxNode value, ValueCxNode cond, StmtCxNode command) {
 		this.token = token;
 		this.type = type;
 		this.name = name;

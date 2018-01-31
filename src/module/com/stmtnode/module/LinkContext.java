@@ -4,28 +4,28 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.stmtnode.lang.cx.stmt.StmtNode;
+import com.stmtnode.lang.cx.stmt.StmtCxNode;
 
 public class LinkContext {
 
-	public final LinkedList<LinkedList<StmtNode>> blocks = new LinkedList<>();
+	public final LinkedList<LinkedList<StmtCxNode>> blocks = new LinkedList<>();
 
 	public void pushBlock() {
 		blocks.addFirst(new LinkedList<>());
 	}
 
-	public void addBlock(StmtNode node) {
+	public void addBlock(StmtCxNode node) {
 		blocks.peek().addFirst(node);
 	}
 
-	public List<StmtNode> peekBlock() {
+	public List<StmtCxNode> peekBlock() {
 		return new ArrayList<>(blocks.getFirst());
 	}
 
-	public List<StmtNode> peekFunction() {
-		LinkedList<StmtNode> list = new LinkedList<>();
-		for (LinkedList<StmtNode> block : blocks) {
-			for (StmtNode node : block) {
+	public List<StmtCxNode> peekFunction() {
+		LinkedList<StmtCxNode> list = new LinkedList<>();
+		for (LinkedList<StmtCxNode> block : blocks) {
+			for (StmtCxNode node : block) {
 				list.addLast(node);
 			}
 		}

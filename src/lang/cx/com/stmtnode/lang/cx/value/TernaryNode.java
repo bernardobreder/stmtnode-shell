@@ -10,15 +10,15 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class TernaryNode extends ValueNode {
+public class TernaryNode extends ValueCxNode {
 
-	public final ValueNode left;
+	public final ValueCxNode left;
 
-	public final ValueNode trueValue;
+	public final ValueCxNode trueValue;
 
-	public final ValueNode falseValue;
+	public final ValueCxNode falseValue;
 
-	public TernaryNode(Token token, ValueNode left, ValueNode trueValue, ValueNode falseValue) {
+	public TernaryNode(Token token, ValueCxNode left, ValueCxNode trueValue, ValueCxNode falseValue) {
 		super(token);
 		this.left = left;
 		this.trueValue = trueValue;

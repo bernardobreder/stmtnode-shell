@@ -10,24 +10,24 @@ import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.stmt.BlockNode;
-import com.stmtnode.lang.cx.type.TypeNode;
+import com.stmtnode.lang.cx.type.TypeCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class FunctionNode extends HeadNode {
+public class FunctionNode extends HeadCxNode {
 
 	public final Token token;
 
-	public final TypeNode type;
+	public final TypeCxNode type;
 
 	public final Token name;
 
-	public final List<ArgumentDeclareNode> arguments;
+	public final List<ArgumentDeclareCxNode> arguments;
 
 	public final BlockNode block;
 
-	public FunctionNode(Token token, TypeNode type, Token name, List<ArgumentDeclareNode> arguments, BlockNode block) {
+	public FunctionNode(Token token, TypeCxNode type, Token name, List<ArgumentDeclareCxNode> arguments, BlockNode block) {
 		this.token = token;
 		this.type = type;
 		this.name = name;

@@ -11,13 +11,13 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class UnitNode extends HeadNode {
+public class UnitNode extends HeadCxNode {
 
-	public final List<HeadNode> includes;
+	public final List<HeadCxNode> includes;
 
-	public final List<HeadNode> nodes;
+	public final List<HeadCxNode> nodes;
 
-	public UnitNode(List<HeadNode> includes, List<HeadNode> nodes) {
+	public UnitNode(List<HeadCxNode> includes, List<HeadCxNode> nodes) {
 		this.includes = includes;
 		this.nodes = nodes;
 	}

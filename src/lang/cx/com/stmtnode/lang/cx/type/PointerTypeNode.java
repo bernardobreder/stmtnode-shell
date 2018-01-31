@@ -11,7 +11,7 @@ import com.stmtnode.module.LinkException;
 
 public class PointerTypeNode extends WrapTypeNode {
 
-	public PointerTypeNode(TypeNode type) {
+	public PointerTypeNode(TypeCxNode type) {
 		super(type);
 	}
 

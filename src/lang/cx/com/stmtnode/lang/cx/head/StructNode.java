@@ -12,7 +12,7 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class StructNode extends HeadNode {
+public class StructNode extends HeadCxNode {
 
 	public final Token token;
 

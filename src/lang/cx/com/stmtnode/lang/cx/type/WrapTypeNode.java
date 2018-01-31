@@ -1,10 +1,10 @@
 package com.stmtnode.lang.cx.type;
 
-public abstract class WrapTypeNode extends TypeNode {
+public abstract class WrapTypeNode extends TypeCxNode {
 
-	public final TypeNode type;
+	public final TypeCxNode type;
 
-	public WrapTypeNode(TypeNode type) {
+	public WrapTypeNode(TypeCxNode type) {
 		this.type = type;
 	}
 

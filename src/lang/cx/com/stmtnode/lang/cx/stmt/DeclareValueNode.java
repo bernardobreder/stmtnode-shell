@@ -6,23 +6,23 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.type.TypeNode;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.type.TypeCxNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class DeclareValueNode extends StmtNode {
+public class DeclareValueNode extends StmtCxNode {
 
 	public final Token token;
 
-	public final TypeNode type;
+	public final TypeCxNode type;
 
 	public final Token name;
 
-	public final ValueNode value;
+	public final ValueCxNode value;
 
-	public DeclareValueNode(Token token, TypeNode type, Token name, ValueNode value) {
+	public DeclareValueNode(Token token, TypeCxNode type, Token name, ValueCxNode value) {
 		this.token = token;
 		this.type = type;
 		this.name = name;

@@ -9,16 +9,16 @@ import java.util.List;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
 public class CallNode extends UnaryNode {
 
-	public final List<ValueNode> arguments;
+	public final List<ValueCxNode> arguments;
 
-	public CallNode(Token token, ValueNode left, List<ValueNode> arguments) {
+	public CallNode(Token token, ValueCxNode left, List<ValueCxNode> arguments) {
 		super(token, left);
 		this.arguments = arguments;
 	}

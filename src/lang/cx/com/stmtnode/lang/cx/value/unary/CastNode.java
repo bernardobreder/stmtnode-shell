@@ -6,17 +6,17 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.type.TypeNode;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.type.TypeCxNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
 public class CastNode extends UnaryNode {
 
-	public final TypeNode type;
+	public final TypeCxNode type;
 
-	public CastNode(Token token, ValueNode left, TypeNode type) {
+	public CastNode(Token token, ValueCxNode left, TypeCxNode type) {
 		super(token, left);
 		this.type = type;
 	}

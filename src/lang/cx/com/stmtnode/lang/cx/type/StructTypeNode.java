@@ -9,7 +9,7 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class StructTypeNode extends TypeNode {
+public class StructTypeNode extends TypeCxNode {
 
 	public final Token name;
 

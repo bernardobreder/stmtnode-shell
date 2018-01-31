@@ -6,18 +6,18 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.type.TypeNode;
+import com.stmtnode.lang.cx.type.TypeCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
-public class StructFieldNode extends HeadNode {
+public class StructFieldNode extends HeadCxNode {
 
 	public final Token name;
 
-	public final TypeNode type;
+	public final TypeCxNode type;
 
-	public StructFieldNode(Token name, TypeNode type) {
+	public StructFieldNode(Token name, TypeCxNode type) {
 		this.name = name;
 		this.type = type;
 	}

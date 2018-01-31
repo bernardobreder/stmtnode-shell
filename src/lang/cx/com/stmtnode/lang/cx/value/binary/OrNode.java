@@ -6,14 +6,14 @@ import static com.stmtnode.module.Nodes.linkNode;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.value.ValueNode;
+import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 
 public class OrNode extends BinaryNode {
 
-	public OrNode(Token token, ValueNode left, ValueNode right) {
+	public OrNode(Token token, ValueCxNode left, ValueCxNode right) {
 		super(token, left, right);
 	}
 
