@@ -9,6 +9,13 @@ public abstract class CxCodeNode extends CodeNode {
 	 * 
 	 * @param output
 	 */
+	public abstract void writeToSource(SourceCodeOutput output);
+
+	/**
+	 * Realiza a escrita do objeto que o representa
+	 * 
+	 * @param output
+	 */
 	public abstract void writeToC(CCodeOutput output);
 
 }

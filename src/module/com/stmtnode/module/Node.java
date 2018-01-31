@@ -16,6 +16,7 @@ public abstract class Node {
 	public abstract <E extends CodeNode> E link(LinkContext context) throws LinkException;
 
 	/**
+	 * @param <E>
 	 * @param value
 	 * @return cast of value
 	 */
@@ -25,6 +26,7 @@ public abstract class Node {
 	}
 
 	/**
+	 * @param <E>
 	 * @param context
 	 * @param list
 	 * @return nodes linked
@@ -38,6 +40,13 @@ public abstract class Node {
 		return result;
 	}
 
+	/**
+	 * @param <E>
+	 * @param context
+	 * @param node
+	 * @return
+	 * @throws LinkException
+	 */
 	protected static <E extends CodeNode> E link(LinkContext context, E node) throws LinkException {
 		return node == null ? null : node.link(context);
 	}

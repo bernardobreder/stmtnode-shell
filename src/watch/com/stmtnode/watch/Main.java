@@ -84,22 +84,24 @@ public class Main {
 				coutput.writeLine();
 			}
 			System.err.println(coutput.toString());
-			if (runner != null) {
-				runner.close();
-			}
-			try {
-				runner = new RunnerProcess(coutput.toString());
-			} catch (IOException e) {
-				System.err.println(e.getMessage());
-			}
-			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-				@Override
-				public void run() {
-					if (runner != null) {
-						runner.close();
-					}
+			if (false) {
+				if (runner != null) {
+					runner.close();
 				}
-			}));
+				try {
+					runner = new RunnerProcess(coutput.toString());
+				} catch (IOException e) {
+					System.err.println(e.getMessage());
+				}
+				Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+					@Override
+					public void run() {
+						if (runner != null) {
+							runner.close();
+						}
+					}
+				}));
+			}
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
