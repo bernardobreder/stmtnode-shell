@@ -10,6 +10,13 @@ public class CCodeOutput extends CodeOutput {
 	public void writeSpaceBeforeCommon() {
 	}
 
+	public void writeSpaceBetweenNameAndSpace() {
+	}
+
+	public void writeSpaceBetweenArgumentAndCommand() {
+		writeSpace();
+	}
+
 	public void writeSpaceBeforeArray() {
 	}
 

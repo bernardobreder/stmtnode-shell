@@ -2,11 +2,10 @@ package com.stmtnode.primitive.stmt;
 
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
-import com.stmtnode.primitive.NativeNode;
 import com.stmtnode.primitive.type.TypeNativeNode;
 import com.stmtnode.primitive.value.ValueNativeNode;
 
-public class DeclareValueNativeNode extends NativeNode {
+public class DeclareValueNativeNode extends StmtNativeNode {
 
 	public final Token name;
 

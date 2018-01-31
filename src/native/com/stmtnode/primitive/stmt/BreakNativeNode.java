@@ -2,11 +2,11 @@ package com.stmtnode.primitive.stmt;
 
 import com.stmtnode.lang.cx.CCodeOutput;
 
-public class ContinueNativeNode extends StmtNativeNode {
+public class BreakNativeNode extends StmtNativeNode {
 
-	public static final ContinueNativeNode GET = new ContinueNativeNode();
+	public static final BreakNativeNode GET = new BreakNativeNode();
 
-	private ContinueNativeNode() {
+	private BreakNativeNode() {
 		super();
 	}
 
@@ -15,7 +15,7 @@ public class ContinueNativeNode extends StmtNativeNode {
 	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
-		output.write("continue");
+		output.write("break");
 		output.writeSpaceBeforeCommon();
 		output.write(';');
 	}

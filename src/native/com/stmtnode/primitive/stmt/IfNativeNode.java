@@ -1,10 +1,9 @@
 package com.stmtnode.primitive.stmt;
 
 import com.stmtnode.lang.cx.CCodeOutput;
-import com.stmtnode.primitive.NativeNode;
 import com.stmtnode.primitive.value.ValueNativeNode;
 
-public class IfNativeNode extends NativeNode {
+public class IfNativeNode extends StmtNativeNode {
 
 	public final ValueNativeNode condition;
 
