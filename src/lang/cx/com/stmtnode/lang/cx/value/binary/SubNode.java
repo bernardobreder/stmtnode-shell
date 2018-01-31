@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.value.binary;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNode;
+
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
@@ -19,7 +22,7 @@ public class SubNode extends BinaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new SubNode(token, link(context, left), link(context, right)));
+		return cast(new SubNode(token, linkNode(context, left), linkNode(context, right)));
 	}
 
 	/**

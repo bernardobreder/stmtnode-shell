@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.stmt;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNode;
+
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
@@ -37,7 +40,7 @@ public class IfLetNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new IfLetNode(token, link(context, type), name, link(context, value), link(context, cond), link(context, command)));
+		return cast(new IfLetNode(token, linkNode(context, type), name, linkNode(context, value), linkNode(context, cond), linkNode(context, command)));
 	}
 
 	/**

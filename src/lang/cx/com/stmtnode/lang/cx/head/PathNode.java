@@ -1,9 +1,9 @@
 package com.stmtnode.lang.cx.head;
 
+import static com.stmtnode.module.Nodes.cast;
 import static java.util.stream.Collectors.joining;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;

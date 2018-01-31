@@ -1,5 +1,7 @@
 package com.stmtnode.lang.cx.type;
 
+import static com.stmtnode.module.Nodes.cast;
+
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.module.CodeNode;

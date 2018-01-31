@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.stmt;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +40,7 @@ public class ReturnNode extends StmtNode {
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
 		List<StmtNode> dones = context.peekFunction();
-		return cast(new ReturnNode(token, link(context, value), dones));
+		return cast(new ReturnNode(token, linkNode(context, value), dones));
 	}
 
 	/**

@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.value;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNode;
+
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
@@ -27,7 +30,7 @@ public class TernaryNode extends ValueNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new TernaryNode(token, link(context, left), link(context, trueValue), link(context, falseValue)));
+		return cast(new TernaryNode(token, linkNode(context, left), linkNode(context, trueValue), linkNode(context, falseValue)));
 	}
 
 	/**

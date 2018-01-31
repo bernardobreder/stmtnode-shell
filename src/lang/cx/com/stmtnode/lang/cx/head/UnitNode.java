@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.head;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNodes;
+
 import java.util.List;
 
 import com.stmtnode.lang.cx.CCodeOutput;
@@ -24,7 +27,7 @@ public class UnitNode extends HeadNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new UnitNode(link(context, includes), link(context, nodes)));
+		return cast(new UnitNode(linkNodes(context, includes), linkNodes(context, nodes)));
 	}
 
 	/**

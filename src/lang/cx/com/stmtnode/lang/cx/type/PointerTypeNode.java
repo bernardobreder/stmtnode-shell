@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.type;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNode;
+
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.module.CodeNode;
@@ -17,7 +20,7 @@ public class PointerTypeNode extends WrapTypeNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new PointerTypeNode(link(context, type)));
+		return cast(new PointerTypeNode(linkNode(context, type)));
 	}
 
 	/**

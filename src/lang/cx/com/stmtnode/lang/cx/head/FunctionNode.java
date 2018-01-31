@@ -1,5 +1,9 @@
 package com.stmtnode.lang.cx.head;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNode;
+import static com.stmtnode.module.Nodes.linkNodes;
+
 import java.util.List;
 
 import com.stmtnode.lang.compiler.Token;
@@ -38,7 +42,7 @@ public class FunctionNode extends HeadNode {
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
 		context.pushBlock();
 		try {
-			return cast(new FunctionNode(token, link(context, type), name, link(context, arguments), block.link(context)));
+			return cast(new FunctionNode(token, linkNode(context, type), name, linkNodes(context, arguments), block.link(context)));
 		} finally {
 			context.popBlock();
 		}

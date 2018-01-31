@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.stmt;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNode;
+
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
@@ -29,7 +32,7 @@ public class WhileNode extends StmtNode {
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
 		context.pushBlock();
 		try {
-			return cast(new WhileNode(token, link(context, value), link(context, command)));
+			return cast(new WhileNode(token, linkNode(context, value), linkNode(context, command)));
 		} finally {
 			context.popBlock();
 		}

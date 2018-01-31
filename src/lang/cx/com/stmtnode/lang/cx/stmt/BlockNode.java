@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.stmt;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNodes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +27,7 @@ public class BlockNode extends StmtNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		BlockNode node = new BlockNode(link(context, this.nodes));
+		BlockNode node = new BlockNode(linkNodes(context, this.nodes));
 		for (StmtNode child : node.nodes) {
 			if (child instanceof ReturnNode) {
 				break;

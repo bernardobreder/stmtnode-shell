@@ -1,5 +1,8 @@
 package com.stmtnode.lang.cx.head;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNodes;
+
 import java.util.List;
 
 import com.stmtnode.lang.compiler.Token;
@@ -28,7 +31,7 @@ public class StructNode extends HeadNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new StructNode(token, name, link(context, nodes)));
+		return cast(new StructNode(token, name, linkNodes(context, nodes)));
 	}
 
 	/**

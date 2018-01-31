@@ -1,5 +1,9 @@
 package com.stmtnode.lang.cx.value.unary;
 
+import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.linkNode;
+import static com.stmtnode.module.Nodes.linkNodes;
+
 import java.util.List;
 
 import com.stmtnode.lang.compiler.Token;
@@ -24,7 +28,7 @@ public class CallNode extends UnaryNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(LinkContext context) throws LinkException {
-		return cast(new CallNode(token, link(context, left), link(context, arguments)));
+		return cast(new CallNode(token, linkNode(context, left), linkNodes(context, arguments)));
 	}
 
 	/**

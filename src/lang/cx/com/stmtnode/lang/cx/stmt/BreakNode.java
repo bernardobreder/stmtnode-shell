@@ -1,5 +1,7 @@
 package com.stmtnode.lang.cx.stmt;
 
+import static com.stmtnode.module.Nodes.cast;
+
 import java.util.ArrayList;
 import java.util.List;
 
