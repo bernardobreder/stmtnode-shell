@@ -12,10 +12,15 @@ public class CodeOutput {
 	private int tab;
 
 	public void writeSpace() {
-		write(" ");
+		write(' ');
 	}
 
 	public CodeOutput write(String text) {
+		sb.append(text);
+		return this;
+	}
+
+	public CodeOutput write(char text) {
 		sb.append(text);
 		return this;
 	}

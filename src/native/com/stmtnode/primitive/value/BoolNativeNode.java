@@ -4,9 +4,13 @@ import com.stmtnode.lang.cx.CCodeOutput;
 
 public class BoolNativeNode extends ValueNativeNode {
 
+	public static final BoolNativeNode TRUE = new BoolNativeNode(true);
+
+	public static final BoolNativeNode FALSE = new BoolNativeNode(false);
+
 	private boolean value;
 
-	public BoolNativeNode(boolean value) {
+	private BoolNativeNode(boolean value) {
 		this.value = value;
 	}
 
@@ -15,7 +19,7 @@ public class BoolNativeNode extends ValueNativeNode {
 	 */
 	@Override
 	public void writeToC(CCodeOutput output) {
-		output.writeInt(value ? 1 : 0);
+		output.write(value ? "1" : "0");
 	}
 
 }
