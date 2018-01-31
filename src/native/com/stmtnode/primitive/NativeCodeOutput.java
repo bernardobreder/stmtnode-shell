@@ -1,11 +1,11 @@
-package com.stmtnode.lang.cx;
+package com.stmtnode.primitive;
 
 import java.util.List;
 
 import com.stmtnode.lang.cx.stmt.StmtCxNode;
 import com.stmtnode.module.CodeOutput;
 
-public class CCodeOutput extends CodeOutput {
+public class NativeCodeOutput extends CodeOutput {
 
 	public void writeSpaceBeforeCommon() {
 	}

@@ -1,6 +1,6 @@
 package com.stmtnode.primitive.stmt;
 
-import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.primitive.NativeCodeOutput;
 
 public class ContinueNativeNode extends StmtNativeNode {
 
@@ -14,7 +14,7 @@ public class ContinueNativeNode extends StmtNativeNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write("continue");
 		output.writeSpaceBeforeCommon();
 		output.write(';');

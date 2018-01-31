@@ -7,13 +7,13 @@ import static com.stmtnode.module.Nodes.linkNodes;
 import java.util.List;
 
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.stmt.BlockNode;
 import com.stmtnode.lang.cx.type.TypeCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
+import com.stmtnode.primitive.NativeCodeOutput;
 
 public class FunctionNode extends HeadCxNode {
 
@@ -70,7 +70,7 @@ public class FunctionNode extends HeadCxNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		type.writeToC(output);
 		output.writeSpace();
 		output.write(name);

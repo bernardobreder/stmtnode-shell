@@ -1,7 +1,7 @@
 package com.stmtnode.primitive.head;
 
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.primitive.NativeCodeOutput;
 
 public class IncludeNativeNode extends HeadNativeNode {
 
@@ -23,7 +23,7 @@ public class IncludeNativeNode extends HeadNativeNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write("#include ");
 		output.write(library ? '<' : '\"');
 		output.write(path);

@@ -1,9 +1,9 @@
 package com.stmtnode.lang.cx.value;
 
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.primitive.NativeCodeNode;
+import com.stmtnode.lang.cx.CxCodeNode;
 
-public abstract class ValueCxNode extends NativeCodeNode {
+public abstract class ValueCxNode extends CxCodeNode {
 
 	public final Token token;
 

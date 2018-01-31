@@ -1,6 +1,6 @@
 package com.stmtnode.primitive.stmt;
 
-import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.primitive.NativeCodeOutput;
 import com.stmtnode.primitive.value.ValueNativeNode;
 
 public class WhileNativeNode extends StmtNativeNode {
@@ -19,7 +19,7 @@ public class WhileNativeNode extends StmtNativeNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write("while");
 		output.writeSpace();
 		output.write('(');

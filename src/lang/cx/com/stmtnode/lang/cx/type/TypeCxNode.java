@@ -1,7 +1,7 @@
 package com.stmtnode.lang.cx.type;
 
-import com.stmtnode.primitive.NativeCodeNode;
+import com.stmtnode.lang.cx.CxCodeNode;
 
-public abstract class TypeCxNode extends NativeCodeNode {
+public abstract class TypeCxNode extends CxCodeNode {
 
 }

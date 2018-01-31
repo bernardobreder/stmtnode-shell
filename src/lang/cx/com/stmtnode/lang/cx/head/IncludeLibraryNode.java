@@ -2,11 +2,11 @@ package com.stmtnode.lang.cx.head;
 
 import static com.stmtnode.module.Nodes.cast;
 
-import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
+import com.stmtnode.primitive.NativeCodeOutput;
 
 public class IncludeLibraryNode extends HeadCxNode {
 
@@ -38,7 +38,7 @@ public class IncludeLibraryNode extends HeadCxNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write("#include <");
 		path.writeToC(output);
 		output.write(">");

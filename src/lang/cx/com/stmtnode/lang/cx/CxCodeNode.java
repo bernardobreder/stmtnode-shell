@@ -1,10 +1,9 @@
-package com.stmtnode.primitive;
+package com.stmtnode.lang.cx;
 
-import com.stmtnode.lang.cx.CCodeOutput;
-import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.module.CodeNode;
+import com.stmtnode.primitive.NativeCodeOutput;
 
-public abstract class NativeCodeNode extends CodeNode {
+public abstract class CxCodeNode extends CodeNode {
 
 	/**
 	 * Realiza a escrita do objeto que o representa
@@ -18,6 +17,6 @@ public abstract class NativeCodeNode extends CodeNode {
 	 * 
 	 * @param output
 	 */
-	public abstract void writeToC(CCodeOutput output);
+	public abstract void writeToC(NativeCodeOutput output);
 
 }

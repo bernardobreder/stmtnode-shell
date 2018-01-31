@@ -2,7 +2,6 @@ package com.stmtnode.primitive;
 
 import static com.stmtnode.module.Nodes.cast;
 
-import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
@@ -27,14 +26,14 @@ public abstract class NativeNode extends CodeNode {
 	 * 
 	 * @param output
 	 */
-	public abstract void writeToC(CCodeOutput output);
+	public abstract void writeToC(NativeCodeOutput output);
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
-		CCodeOutput output = new CCodeOutput();
+		NativeCodeOutput output = new NativeCodeOutput();
 		writeToC(output);
 		return output.toString();
 	}

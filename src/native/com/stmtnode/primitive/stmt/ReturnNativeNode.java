@@ -1,6 +1,6 @@
 package com.stmtnode.primitive.stmt;
 
-import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.primitive.NativeCodeOutput;
 import com.stmtnode.primitive.value.ValueNativeNode;
 
 public class ReturnNativeNode extends StmtNativeNode {
@@ -16,7 +16,7 @@ public class ReturnNativeNode extends StmtNativeNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write("return");
 		output.writeSpace();
 		value.writeToC(output);

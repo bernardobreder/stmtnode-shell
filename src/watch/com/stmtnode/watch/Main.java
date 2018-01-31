@@ -15,7 +15,6 @@ import java.util.Set;
 import com.stmtnode.lang.compiler.Grammar.SyntaxException;
 import com.stmtnode.lang.compiler.Lexer;
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.CxGrammar;
 import com.stmtnode.lang.cx.head.HeadCxNode;
 import com.stmtnode.lang.cx.head.IncludeLibraryNode;
@@ -26,6 +25,7 @@ import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 import com.stmtnode.module.ModuleData;
 import com.stmtnode.module.ModuleRoot;
+import com.stmtnode.primitive.NativeCodeOutput;
 import com.stmtnode.runner.RunnerProcess;
 
 public class Main {
@@ -47,7 +47,7 @@ public class Main {
 					.filter(e -> e instanceof UnitNode) //
 					.map(e -> (UnitNode) e) //
 					.collect(toList());
-			CCodeOutput coutput = new CCodeOutput();
+			NativeCodeOutput coutput = new NativeCodeOutput();
 			List<IncludeLibraryNode> librarys = codes.stream() //
 					.flatMap(e -> e.includes.stream()) //
 					.filter(e -> e instanceof IncludeLibraryNode) //

@@ -1,6 +1,6 @@
 package com.stmtnode.primitive.stmt;
 
-import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.primitive.NativeCodeOutput;
 import com.stmtnode.primitive.value.ValueNativeNode;
 
 public class IfNativeNode extends StmtNativeNode {
@@ -19,7 +19,7 @@ public class IfNativeNode extends StmtNativeNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write("if");
 		output.writeSpace();
 		output.write('(');

@@ -1,6 +1,6 @@
 package com.stmtnode.primitive.type;
 
-import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.primitive.NativeCodeOutput;
 
 public class UIntTypeNativeNode extends TypeNativeNode {
 
@@ -13,7 +13,7 @@ public class UIntTypeNativeNode extends TypeNativeNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write("uint");
 	}
 

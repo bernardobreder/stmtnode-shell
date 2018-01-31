@@ -1,6 +1,6 @@
 package com.stmtnode.primitive.value;
 
-import com.stmtnode.lang.cx.CCodeOutput;
+import com.stmtnode.primitive.NativeCodeOutput;
 
 public class BoolNativeNode extends ValueNativeNode {
 
@@ -18,7 +18,7 @@ public class BoolNativeNode extends ValueNativeNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write(value ? "1" : "0");
 	}
 

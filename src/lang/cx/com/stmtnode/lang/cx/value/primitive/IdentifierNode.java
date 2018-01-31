@@ -3,12 +3,12 @@ package com.stmtnode.lang.cx.value.primitive;
 import static com.stmtnode.module.Nodes.cast;
 
 import com.stmtnode.lang.compiler.Token;
-import com.stmtnode.lang.cx.CCodeOutput;
 import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
+import com.stmtnode.primitive.NativeCodeOutput;
 
 public class IdentifierNode extends ValueCxNode {
 
@@ -36,7 +36,7 @@ public class IdentifierNode extends ValueCxNode {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeToC(CCodeOutput output) {
+	public void writeToC(NativeCodeOutput output) {
 		output.write(token);
 	}
 
