@@ -4,4 +4,8 @@ import com.stmtnode.primitive.NativeNode;
 
 public abstract class TypeNativeNode extends NativeNode {
 
+	public boolean isPointer() {
+		return false;
+	}
+
 }

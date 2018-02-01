@@ -7,9 +7,9 @@ public class ExpNativeNode extends StmtNativeNode {
 
 	public final ValueNativeNode value;
 
-	public ExpNativeNode(ValueNativeNode condition) {
+	public ExpNativeNode(ValueNativeNode value) {
 		super();
-		this.value = condition;
+		this.value = value;
 	}
 
 	/**

@@ -1,19 +1,24 @@
 package com.stmtnode.primitive.stmt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.stmtnode.primitive.NativeCodeOutput;
 
-public class BlockNativeNode extends StmtNativeNode {
+public class BlockNativeNode extends StmtSetNativeNode {
 
-	public final List<StmtNativeNode> nodes;
+	/**
+	 * Construtor padrão
+	 */
+	public BlockNativeNode() {
+		this(new ArrayList<>());
+	}
 
 	/**
 	 * @param nodes
 	 */
 	public BlockNativeNode(List<StmtNativeNode> nodes) {
-		super();
-		this.nodes = nodes;
+		super(nodes);
 	}
 
 	/**
@@ -25,7 +30,7 @@ public class BlockNativeNode extends StmtNativeNode {
 		output.writeLine();
 		output.incTab();
 		output.writeTab();
-		output.writeLines(nodes, e -> e.writeToC(output));
+		super.writeToC(output);
 		output.writeLine();
 		output.decTab();
 		output.writeTab();

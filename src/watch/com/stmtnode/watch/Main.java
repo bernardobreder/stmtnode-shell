@@ -17,14 +17,13 @@ import com.stmtnode.lang.compiler.Lexer;
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.CxGrammar;
 import com.stmtnode.lang.cx.head.HeadCxNode;
-import com.stmtnode.lang.cx.head.IncludeLibraryNode;
-import com.stmtnode.lang.cx.head.IncludeSourceNode;
-import com.stmtnode.lang.cx.head.UnitNode;
+import com.stmtnode.lang.cx.head.IncludeCxNode;
+import com.stmtnode.lang.cx.head.UnitCxNode;
 import com.stmtnode.module.CodeNode;
-import com.stmtnode.module.LinkContext;
 import com.stmtnode.module.LinkException;
 import com.stmtnode.module.ModuleData;
 import com.stmtnode.module.ModuleRoot;
+import com.stmtnode.module.NodeContext;
 import com.stmtnode.primitive.NativeCodeOutput;
 import com.stmtnode.runner.RunnerProcess;
 
@@ -43,42 +42,44 @@ public class Main {
 
 	private void execute(ModuleRoot root) {
 		try {
-			List<UnitNode> codes = compile(root).values().stream() //
-					.filter(e -> e instanceof UnitNode) //
-					.map(e -> (UnitNode) e) //
+			List<UnitCxNode> codes = compile(root).values().stream() //
+					.filter(e -> e instanceof UnitCxNode) //
+					.map(e -> (UnitCxNode) e) //
 					.collect(toList());
 			NativeCodeOutput coutput = new NativeCodeOutput();
-			List<IncludeLibraryNode> librarys = codes.stream() //
+			List<IncludeCxNode> librarys = codes.stream() //
 					.flatMap(e -> e.includes.stream()) //
-					.filter(e -> e instanceof IncludeLibraryNode) //
-					.map(e -> (IncludeLibraryNode) e) //
+					.filter(e -> e instanceof IncludeCxNode) //
+					.map(e -> (IncludeCxNode) e) //
+					.filter(e -> !e.library) //
 					.collect(toList());
-			List<IncludeSourceNode> includes = codes.stream() //
+			List<IncludeCxNode> includes = codes.stream() //
 					.flatMap(e -> e.includes.stream()) //
-					.filter(e -> e instanceof IncludeSourceNode) //
-					.map(e -> (IncludeSourceNode) e) //
+					.filter(e -> e instanceof IncludeCxNode) //
+					.map(e -> (IncludeCxNode) e) //
+					.filter(e -> !e.library) //
 					.collect(toList());
 			Set<String> libraryAdded = new HashSet<>();
-			for (IncludeLibraryNode library : librarys) {
-				String path = library.path.path;
+			for (IncludeCxNode library : librarys) {
+				String path = library.path.word;
 				if (!libraryAdded.contains(path)) {
 					libraryAdded.add(path);
-					library.writeToC(coutput);
+					library.toNative().writeToC(coutput);
 					coutput.writeLine();
 				}
 			}
 			Set<String> includeAdded = new HashSet<>();
-			for (IncludeSourceNode include : includes) {
+			for (IncludeCxNode include : includes) {
 				String path = include.path.word;
 				if (!includeAdded.contains(path)) {
 					includeAdded.add(path);
-					include.writeToC(coutput);
+					include.toNative().writeToC(coutput);
 					coutput.writeLine();
 				}
 			}
-			for (UnitNode unit : codes) {
+			for (UnitCxNode unit : codes) {
 				for (HeadCxNode node : unit.nodes) {
-					node.writeToC(coutput);
+					node.toNative().writeToC(coutput);
 					coutput.writeLine();
 				}
 				coutput.writeLine();
@@ -134,7 +135,7 @@ public class Main {
 		String name = path.toFile().getName();
 		Token[] tokens = new Lexer(path.toString(), content).execute();
 		if (name.endsWith(".cx")) {
-			LinkContext context = new LinkContext();
+			NodeContext context = new NodeContext();
 			return new CxGrammar(tokens).parseUnit().link(context);
 		}
 		throw new IllegalArgumentException(path.toString());
