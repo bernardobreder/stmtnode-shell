@@ -20,6 +20,14 @@ public class PointerTypeCxNode extends WrapTypeCxNode {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public boolean isPointer() {
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
 		return cast(new PointerTypeCxNode(linkNode(type, context)));
 	}

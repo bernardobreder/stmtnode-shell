@@ -1,6 +1,7 @@
 package com.stmtnode.lang.cx.stmt;
 
 import static com.stmtnode.module.Nodes.cast;
+import static com.stmtnode.module.Nodes.headNode;
 import static com.stmtnode.module.Nodes.linkNode;
 import static com.stmtnode.module.Nodes.nativeNode;
 
@@ -38,7 +39,7 @@ public class DeclareValueCxNode extends StmtCxNode {
 	@Override
 	public void head(NodeContext context) throws HeadException {
 		type.head(context);
-		value.head(context);
+		headNode(value, context);
 	}
 
 	/**

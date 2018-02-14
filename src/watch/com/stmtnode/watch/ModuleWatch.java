@@ -12,15 +12,19 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import com.stmtnode.json.JsonObject;
+import com.stmtnode.module.MD5;
 import com.stmtnode.module.ModuleData;
 import com.stmtnode.module.ModuleRoot;
+import com.stmtnode.module.SourceData;
 
 public class ModuleWatch implements Runnable {
 
@@ -37,6 +41,8 @@ public class ModuleWatch implements Runnable {
 	private boolean changed;
 
 	private Map<Path, byte[]> pathToBytes = new HashMap<>();
+
+	private Map<Path, MD5> md5s = new HashMap<>();
 
 	private ModuleRoot root = new ModuleRoot(new ArrayList<>());
 
@@ -60,7 +66,6 @@ public class ModuleWatch implements Runnable {
 	public void run() {
 		while (!stopped) {
 			changed = false;
-			root.modules.clear();
 			try {
 				read(dir);
 			} catch (IOException | ParseException e1) {
@@ -90,14 +95,29 @@ public class ModuleWatch implements Runnable {
 			Optional<String> nameOpt = json.getAsString("name");
 			if (nameOpt.isPresent()) {
 				map.remove("package.json");
-				ModuleData module = new ModuleData(nameOpt.get());
+				String name = nameOpt.get();
+				ModuleData module = root.computeModule(name, () -> new ModuleData(name));
 				List<Path> paths = map.values().stream().collect(toList());
+				Set<Path> modulePaths = new HashSet<>(module.contents.keySet());
 				for (Path path : paths) {
 					if (path.toFile().isFile()) {
-						module.contents.put(path, readContent(path));
+						modulePaths.remove(path);
+						byte[] bytes = Files.readAllBytes(path);
+						MD5 md5 = new MD5(bytes);
+						MD5 lastMd5 = md5s.get(path);
+						if (!md5.equals(lastMd5)) {
+							md5s.put(path, md5);
+							String content = new String(bytes, StandardCharsets.UTF_8);
+							module.contents.put(path, new SourceData(path, content, null));
+							changed = true;
+						}
 					}
 				}
-				root.modules.add(module);
+				if (!modulePaths.isEmpty()) {
+					for (Path path : modulePaths) {
+						module.contents.remove(path);
+					}
+				}
 			}
 		} else {
 			for (Path path : map.values()) {
@@ -109,17 +129,9 @@ public class ModuleWatch implements Runnable {
 	}
 
 	protected JsonObject readPackage(Path packagePath) throws IOException, ParseException {
-		return new JsonObject(readContent(packagePath));
-	}
-
-	protected String readContent(Path packagePath) throws IOException {
 		byte[] bytes = Files.readAllBytes(packagePath);
-		byte[] lastBytes = pathToBytes.get(packagePath);
-		if (lastBytes == null || !Arrays.equals(bytes, lastBytes)) {
-			changed = true;
-			pathToBytes.put(packagePath, bytes);
-		}
-		return new String(bytes, StandardCharsets.UTF_8);
+		String content = new String(bytes, StandardCharsets.UTF_8);
+		return new JsonObject(content);
 	}
 
 	public void close() {

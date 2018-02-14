@@ -1,26 +1,22 @@
-package com.stmtnode.lang.cx.value.primitive;
+package com.stmtnode.lang.cx.stmt;
 
 import static com.stmtnode.module.Nodes.cast;
 
 import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.lang.cx.SourceCodeOutput;
-import com.stmtnode.lang.cx.type.TypeCxNode;
-import com.stmtnode.lang.cx.value.ValueCxNode;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.HeadException;
 import com.stmtnode.module.LinkException;
 import com.stmtnode.module.NodeContext;
-import com.stmtnode.primitive.value.ValueNativeNode;
-import com.stmtnode.primitive.value.literal.IdNativeNode;
+import com.stmtnode.primitive.stmt.StmtNativeNode;
+import com.stmtnode.primitive.stmt.StmtSetNativeNode;
 
-public class IdentifierCxNode extends ValueCxNode {
+public class DeferClearCxNode extends StmtCxNode {
 
-	public IdentifierCxNode(Token token) {
-		super(token, null);
-	}
+	public final Token token;
 
-	public IdentifierCxNode(Token token, TypeCxNode type) {
-		super(token, type);
+	public DeferClearCxNode(Token token) {
+		this.token = token;
 	}
 
 	/**
@@ -35,8 +31,8 @@ public class IdentifierCxNode extends ValueCxNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
-		// context.findType(token.word);
-		return cast(this);
+		context.clearBlock();
+		return cast(new DeferClearCxNode(token));
 	}
 
 	/**
@@ -44,15 +40,17 @@ public class IdentifierCxNode extends ValueCxNode {
 	 */
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
-		output.write(token);
+		output.write("defer");
+		output.writeSpace();
+		output.write("clear");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ValueNativeNode toNative() {
-		return new IdNativeNode(token);
+	public StmtNativeNode toNative() {
+		return new StmtSetNativeNode();
 	}
 
 }

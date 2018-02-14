@@ -90,7 +90,9 @@ public abstract class Nodes {
 	 * @throws HeadException
 	 */
 	public static <E extends CodeCxNode> void headNode(E node, NodeContext context) throws HeadException {
-		node.head(context);
+		if (node != null) {
+			node.head(context);
+		}
 	}
 
 	public static Token joinTokens(List<Token> tokens) {

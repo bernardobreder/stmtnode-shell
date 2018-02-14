@@ -11,6 +11,12 @@ struct arraylist_t {
 func struct arraylist_t* arraylist_new() {
     guard let struct arraylist_t* self = malloc(sizeof(struct arraylist_t)).cast(struct arraylist_t*), self { return 0 }
     defer free(self)
-    self.data = malloc(sizeof(void*) * self.max).cast(void**)
+    guard let void* data = self.data = malloc(sizeof(void*) * self.max).cast(void**), data { return 0 }
+    defer clear
     return self
+}
+
+func void arraylist_free(struct arraylist_t* self) {
+    free(self.data)
+    free(self)
 }

@@ -4,11 +4,11 @@ import com.stmtnode.lang.compiler.Token;
 import com.stmtnode.primitive.NativeCodeOutput;
 import com.stmtnode.primitive.value.ValueNativeNode;
 
-public class GetNativeNode extends UnaryNativeNode {
+public class GetStructNativeNode extends UnaryNativeNode {
 
 	public final Token name;
 
-	public GetNativeNode(ValueNativeNode left, Token name) {
+	public GetStructNativeNode(ValueNativeNode left, Token name) {
 		super(left);
 		this.name = name;
 	}

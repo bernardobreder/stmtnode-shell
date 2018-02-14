@@ -14,6 +14,11 @@ public abstract class TypeCxNode extends CodeCxNode {
 	public void head(NodeContext context) throws HeadException {
 	}
 
+	@Override
 	public abstract TypeNativeNode toNative();
+
+	public boolean isPointer() {
+		return false;
+	}
 
 }

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import com.stmtnode.lang.compiler.Grammar.SyntaxException;
@@ -20,10 +19,12 @@ import com.stmtnode.lang.cx.head.HeadCxNode;
 import com.stmtnode.lang.cx.head.IncludeCxNode;
 import com.stmtnode.lang.cx.head.UnitCxNode;
 import com.stmtnode.module.CodeNode;
+import com.stmtnode.module.HeadException;
 import com.stmtnode.module.LinkException;
 import com.stmtnode.module.ModuleData;
 import com.stmtnode.module.ModuleRoot;
 import com.stmtnode.module.NodeContext;
+import com.stmtnode.module.SourceData;
 import com.stmtnode.primitive.NativeCodeOutput;
 import com.stmtnode.runner.RunnerProcess;
 
@@ -51,7 +52,7 @@ public class Main {
 					.flatMap(e -> e.includes.stream()) //
 					.filter(e -> e instanceof IncludeCxNode) //
 					.map(e -> (IncludeCxNode) e) //
-					.filter(e -> !e.library) //
+					.filter(e -> e.library) //
 					.collect(toList());
 			List<IncludeCxNode> includes = codes.stream() //
 					.flatMap(e -> e.includes.stream()) //
@@ -110,35 +111,71 @@ public class Main {
 
 	protected Map<Path, CodeNode> compile(ModuleRoot root) throws LinkException {
 		boolean error = false;
-		Map<Path, CodeNode> codes = new HashMap<>();
 		List<ModuleData> modules = root.modules;
 		for (ModuleData module : modules) {
-			error |= compile(codes, module);
+			error |= compile(module);
 		}
-		return error ? null : codes;
+		if (error) {
+			return null;
+		}
+		NodeContext context = new NodeContext();
+		for (ModuleData module : root.modules) {
+			for (SourceData source : module.contents.values()) {
+				try {
+					source.node.head(context);
+				} catch (HeadException e) {
+					error = true;
+					System.err.println(e.getMessage());
+				}
+			}
+		}
+		if (error) {
+			return null;
+		}
+		for (ModuleData module : root.modules) {
+			for (SourceData source : module.contents.values()) {
+				try {
+					source.node = source.node.link(context);
+				} catch (LinkException e) {
+					error = true;
+					System.err.println(e.getMessage());
+				}
+			}
+		}
+		if (error) {
+			return null;
+		}
+		Map<Path, CodeNode> codes = new HashMap<>();
+		for (ModuleData module : root.modules) {
+			for (SourceData source : module.contents.values()) {
+				codes.put(source.path, source.node);
+			}
+		}
+		return codes;
 	}
 
-	protected boolean compile(Map<Path, CodeNode> codes, ModuleData module) throws LinkException {
+	protected boolean compile(ModuleData module) throws LinkException {
 		boolean error = false;
-		for (Entry<Path, String> entry : module.contents.entrySet()) {
-			try {
-				codes.put(entry.getKey(), compile(entry.getKey(), entry.getValue()));
-			} catch (SyntaxException e) {
-				error = true;
-				System.err.println(e.getMessage());
+		for (SourceData source : module.contents.values()) {
+			if (source.node == null) {
+				try {
+					source.node = compile(source);
+				} catch (SyntaxException e) {
+					error = true;
+					System.err.println(e.getMessage());
+				}
 			}
 		}
 		return error;
 	}
 
-	private CodeNode compile(Path path, String content) throws SyntaxException, LinkException {
-		String name = path.toFile().getName();
-		Token[] tokens = new Lexer(path.toString(), content).execute();
+	private CodeNode compile(SourceData source) throws SyntaxException {
+		String name = source.path.toFile().getName();
+		Token[] tokens = new Lexer(source.path.toString(), source.content).execute();
 		if (name.endsWith(".cx")) {
-			NodeContext context = new NodeContext();
-			return new CxGrammar(tokens).parseUnit().link(context);
+			return new CxGrammar(tokens).parseUnit();
 		}
-		throw new IllegalArgumentException(path.toString());
+		throw new IllegalArgumentException(source.path.toString());
 	}
 
 	public static void main(String[] args) {

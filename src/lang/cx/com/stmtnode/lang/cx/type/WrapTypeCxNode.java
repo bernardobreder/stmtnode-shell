@@ -8,4 +8,12 @@ public abstract class WrapTypeCxNode extends TypeCxNode {
 		this.type = type;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isPointer() {
+		return type.isPointer();
+	}
+
 }

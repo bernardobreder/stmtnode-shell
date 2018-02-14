@@ -11,7 +11,8 @@ import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkException;
 import com.stmtnode.module.NodeContext;
 import com.stmtnode.primitive.value.ValueNativeNode;
-import com.stmtnode.primitive.value.unary.GetNativeNode;
+import com.stmtnode.primitive.value.unary.GetPointerNativeNode;
+import com.stmtnode.primitive.value.unary.GetStructNativeNode;
 
 public class GetCxNode extends UnaryCxNode {
 
@@ -31,7 +32,8 @@ public class GetCxNode extends UnaryCxNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
-		return cast(new GetCxNode(token, linkNode(left, context), name));
+		ValueCxNode left = linkNode(this.left, context);
+		return cast(new GetCxNode(token, left.type, left, name));
 	}
 
 	/**
@@ -49,7 +51,11 @@ public class GetCxNode extends UnaryCxNode {
 	 */
 	@Override
 	public ValueNativeNode toNative() {
-		return new GetNativeNode(left.toNative(), name);
+		if (type.isPointer()) {
+			return new GetPointerNativeNode(left.toNative(), name);
+		} else {
+			return new GetStructNativeNode(left.toNative(), name);
+		}
 	}
 
 }

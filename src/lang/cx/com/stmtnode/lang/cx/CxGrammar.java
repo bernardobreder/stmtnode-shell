@@ -21,6 +21,7 @@ import com.stmtnode.lang.cx.stmt.BreakCxNode;
 import com.stmtnode.lang.cx.stmt.ContinueCxNode;
 import com.stmtnode.lang.cx.stmt.DeclareArrayCxNode;
 import com.stmtnode.lang.cx.stmt.DeclareValueCxNode;
+import com.stmtnode.lang.cx.stmt.DeferClearCxNode;
 import com.stmtnode.lang.cx.stmt.DeferCxNode;
 import com.stmtnode.lang.cx.stmt.ExpCxNode;
 import com.stmtnode.lang.cx.stmt.GuardCxNode;
@@ -307,8 +308,12 @@ public class CxGrammar extends Grammar {
 
 	protected StmtCxNode parseDefer() throws SyntaxException {
 		Token token = read("defer", "expected defer keyword");
-		StmtCxNode command = parseCommand();
-		return new DeferCxNode(token, command);
+		if (can("clear")) {
+			return new DeferClearCxNode(token);
+		} else {
+			StmtCxNode command = parseCommand();
+			return new DeferCxNode(token, command);
+		}
 	}
 
 	protected StmtCxNode parseWhile() throws SyntaxException {
