@@ -32,10 +32,11 @@ public class Main {
 
 	private RunnerProcess runner;
 
-	public Main(List<Path> paths) throws Exception {
+	public Main(List<Path> paths, Path targetPath) throws Exception {
 		for (Entry<Path, UnitCxNode> entry : execute(paths).entrySet()) {
-			Path path = Paths.get(entry.getKey().getParent().toString(), entry.getKey().toFile().getName() + ".c");
+			Path path = createTargetPath(entry, targetPath);
 			UnitCxNode unitNode = entry.getValue();
+			path.getParent().toFile().mkdirs();
 			try (FileOutputStream out = new FileOutputStream(path.toFile())) {
 				NativeCodeOutput coutput = new NativeCodeOutput();
 				if (!unitNode.includes.isEmpty()) {
@@ -51,6 +52,14 @@ public class Main {
 				}
 				out.write(coutput.toString().getBytes(UTF_8));
 			}
+		}
+	}
+
+	public Path createTargetPath(Entry<Path, UnitCxNode> entry, Path targetPath) {
+		if (targetPath == null) {
+			return Paths.get(entry.getKey().getParent().toString(), entry.getKey().toFile().getName() + ".c");
+		} else {
+			return targetPath.resolve(entry.getKey().toFile().getName() + ".c");
 		}
 	}
 
@@ -122,15 +131,24 @@ public class Main {
 	}
 
 	public static void main(String[] args) throws Exception {
+		Path targetPath = null;
 		List<Path> paths = new ArrayList<>();
 		for (int n = 0; n < args.length; n++) {
-			paths.add(Paths.get(args[n]));
+			String arg = args[n].trim();
+			if (arg.length() == 0) {
+				continue;
+			}
+			if (arg.equals("-o")) {
+				targetPath = Paths.get(args[++n]);
+			} else {
+				paths.add(Paths.get(arg));
+			}
 		}
 		if (paths.isEmpty()) {
 			System.out.println("compile File...");
 			return;
 		}
-		new Main(paths);
+		new Main(paths, targetPath);
 	}
 
 }

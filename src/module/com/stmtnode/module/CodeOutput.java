@@ -76,10 +76,16 @@ public class CodeOutput {
 			return;
 		}
 		consumer.accept(list.get(0));
+		boolean hasData = true;
 		for (int i = 1; i < list.size(); i++) {
-			writeLine();
-			writeTab();
-			consumer.accept(list.get(i));
+			E element = list.get(i);
+			if (hasData) {
+				writeLine();
+				writeTab();
+			}
+			int size = sb.length();
+			consumer.accept(element);
+			hasData = size != sb.length();
 		}
 	}
 

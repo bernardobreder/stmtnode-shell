@@ -12,6 +12,6 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.stmtnode.watch.Main"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="mod/demo/hello/main.cx"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="mod/demo/hello/main.cx mod/list/array/arraylist.cx -o out"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="stmtnode-shell"/>
 </launchConfiguration>
