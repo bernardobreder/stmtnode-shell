@@ -4,6 +4,7 @@ import static com.stmtnode.module.Nodes.cast;
 import static com.stmtnode.module.Nodes.headNodes;
 import static com.stmtnode.module.Nodes.linkNodes;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import com.stmtnode.lang.cx.CodeCxNode;
@@ -16,11 +17,14 @@ import com.stmtnode.primitive.NativeNode;
 
 public class UnitCxNode extends CodeCxNode {
 
+	public final Path path;
+
 	public final List<HeadCxNode> includes;
 
 	public final List<HeadCxNode> nodes;
 
-	public UnitCxNode(List<HeadCxNode> includes, List<HeadCxNode> nodes) {
+	public UnitCxNode(Path path, List<HeadCxNode> includes, List<HeadCxNode> nodes) {
+		this.path = path;
 		this.includes = includes;
 		this.nodes = nodes;
 	}
@@ -39,7 +43,7 @@ public class UnitCxNode extends CodeCxNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
-		return cast(new UnitCxNode(linkNodes(includes, context), linkNodes(nodes, context)));
+		return cast(new UnitCxNode(path, linkNodes(includes, context), linkNodes(nodes, context)));
 	}
 
 	/**

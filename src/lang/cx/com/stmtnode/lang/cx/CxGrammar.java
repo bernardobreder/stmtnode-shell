@@ -4,6 +4,7 @@ import static com.stmtnode.module.Nodes.joinTokens;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,8 +75,11 @@ import com.stmtnode.lang.cx.value.unary.PreIncCxNode;
 
 public class CxGrammar extends Grammar {
 
-	public CxGrammar(Token[] tokens) {
+	private final Path path;
+
+	public CxGrammar(Path path, Token[] tokens) {
 		super(tokens);
+		this.path = path;
 	}
 
 	public UnitCxNode parseUnit() throws SyntaxException {
@@ -87,7 +91,7 @@ public class CxGrammar extends Grammar {
 		while (!eof()) {
 			nodes.add(parseUnitItem());
 		}
-		return new UnitCxNode(includes, nodes);
+		return new UnitCxNode(path, includes, nodes);
 	}
 
 	protected HeadCxNode parsePrecompiler() throws SyntaxException {

@@ -1,0 +1,71 @@
+<project name="BandeiraBRFx" default="dist" basedir=".">
+	<property name="logic-src" location="logic" />
+	<property name="server-src" location="server" />
+	<property name="client-src" location="client" />
+	<property name="client-gui-src" location="gui" />
+	<property name="lib" location="lib" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+
+	<target name="info">
+		<property environment="env" />
+		<echo>JAVA_HOME is set to = ${env.JAVA_HOME}"</echo>
+		<echo>Java/JVM version: ${ant.java.version}</echo>
+		<echo>Java/JVM detail version: ${java.version}</echo>
+	</target>
+
+	<path id="server-classpath">
+		<fileset dir="${lib}" includes="**/*.jar" />
+	</path>
+
+	<target name="init">
+		<tstamp />
+	</target>
+
+	<target name="server-compile" depends="init">
+		<delete dir="${build}" />
+		<mkdir dir="${build}" />
+		<javac srcdir="${logic-src}" destdir="${build}" source="1.8" target="1.8" encoding="utf-8" includeantruntime="false">
+		</javac>
+		<javac srcdir="${server-src}" destdir="${build}" classpathref="server-classpath" source="1.8" target="1.8" encoding="utf-8" includeantruntime="false">
+		</javac>
+	</target>
+
+	<target name="client-compile" depends="init">
+		<delete dir="${build}" />
+		<mkdir dir="${build}" />
+		<javac srcdir="${logic-src}" destdir="${build}" source="1.8" target="1.8" encoding="utf-8" includeantruntime="false">
+		</javac>
+		<javac srcdir="${client-gui-src}" destdir="${build}" classpathref="server-classpath" source="1.8" target="1.8" encoding="utf-8" includeantruntime="false">
+		</javac>
+		<javac srcdir="${client-src}" destdir="${build}" classpathref="server-classpath" source="1.8" target="1.8" encoding="utf-8" includeantruntime="false">
+		</javac>
+	</target>
+
+	<target name="dist" depends="clean, info, server-dist, client-dist">
+	</target>
+
+	<target name="server-dist" depends="server-compile">
+		<mkdir dir="${dist}" />
+		<jar jarfile="${dist}/bandeirabrfx-server.jar" basedir="${build}">
+			<manifest>
+				<attribute name="Main-Class" value="bandeirabr.server.kernel.BandeiraServer" />
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${lib}/ojdbc6.jar" />
+		</jar>
+	</target>
+
+	<target name="client-dist" depends="client-compile">
+		<mkdir dir="${dist}" />
+		<jar jarfile="${dist}/bandeirabrfx-client.jar" basedir="${build}">
+			<manifest>
+				<attribute name="Main-Class" value="bandeirabrfx.MainTest" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+</project>
