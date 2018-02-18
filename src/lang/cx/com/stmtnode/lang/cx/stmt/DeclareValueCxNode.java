@@ -47,7 +47,10 @@ public class DeclareValueCxNode extends StmtCxNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
-		return cast(new DeclareValueCxNode(token, linkNode(type, context), name, linkNode(value, context)));
+		TypeCxNode type = linkNode(this.type, context);
+		ValueCxNode value = linkNode(this.value, context);
+		context.declareVariable(name, type);
+		return cast(new DeclareValueCxNode(token, type, name, value));
 	}
 
 	/**

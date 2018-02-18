@@ -56,11 +56,24 @@ public class FunctionCxNode extends HeadCxNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
+		context.pushStmt(this);
 		context.pushBlock();
 		try {
-			return cast(new FunctionCxNode(token, linkNode(type, context), name, linkNodes(arguments, context), linkNode(block, context)));
+			TypeCxNode type = linkNode(this.type, context);
+			List<ArgumentDeclareCxNode> arguments = linkNodes(this.arguments, context);
+			for (ArgumentDeclareCxNode argumentNode : arguments) {
+				context.declareVariable(argumentNode.name, argumentNode.type);
+			}
+			context.pushBlock();
+			try {
+				BlockCxNode block = linkNode(this.block, context);
+				return cast(new FunctionCxNode(token, type, name, arguments, block));
+			} finally {
+				context.popBlock();
+			}
 		} finally {
 			context.popBlock();
+			context.popStmt();
 		}
 	}
 

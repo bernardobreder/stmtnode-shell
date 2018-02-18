@@ -21,11 +21,7 @@ public class GuardLetCxNode extends StmtCxNode {
 
 	public final Token token;
 
-	public final TypeCxNode type;
-
-	public final Token name;
-
-	public final ValueCxNode value;
+	public final DeclareValueCxNode declare;
 
 	public final ValueCxNode cond;
 
@@ -33,9 +29,21 @@ public class GuardLetCxNode extends StmtCxNode {
 
 	public GuardLetCxNode(Token token, TypeCxNode type, Token name, ValueCxNode value, ValueCxNode cond, StmtCxNode command) {
 		this.token = token;
-		this.type = type;
-		this.name = name;
-		this.value = value;
+		this.declare = new DeclareValueCxNode(token, type, name, value);
+		this.cond = cond;
+		this.command = command;
+	}
+
+	/**
+	 * @param token
+	 * @param declare
+	 * @param cond
+	 * @param command
+	 */
+	public GuardLetCxNode(Token token, DeclareValueCxNode declare, ValueCxNode cond, StmtCxNode command) {
+		super();
+		this.token = token;
+		this.declare = declare;
 		this.cond = cond;
 		this.command = command;
 	}
@@ -45,8 +53,7 @@ public class GuardLetCxNode extends StmtCxNode {
 	 */
 	@Override
 	public void head(NodeContext context) throws HeadException {
-		type.head(context);
-		value.head(context);
+		declare.head(context);
 		cond.head(context);
 		command.head(context);
 	}
@@ -56,7 +63,10 @@ public class GuardLetCxNode extends StmtCxNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
-		return cast(new GuardLetCxNode(token, linkNode(type, context), name, linkNode(value, context), cond.link(context), linkNode(command, context)));
+		DeclareValueCxNode declare = linkNode(this.declare, context);
+		ValueCxNode cond = linkNode(this.cond, context);
+		StmtCxNode command = linkNode(this.command, context);
+		return cast(new GuardLetCxNode(token, declare, cond, command));
 	}
 
 	/**
@@ -65,10 +75,10 @@ public class GuardLetCxNode extends StmtCxNode {
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
 		output.write("guard let ");
-		type.writeToSource(output);
+		declare.type.writeToSource(output);
 		output.writeSpace();
-		output.write(name);
-		value.writeToSource(output);
+		output.write(declare.name);
+		declare.value.writeToSource(output);
 		output.writeSpace();
 		if (cond != null) {
 			output.write(", ");
@@ -84,7 +94,7 @@ public class GuardLetCxNode extends StmtCxNode {
 	@Override
 	public StmtNativeNode toNative() {
 		StmtSetNativeNode block = new StmtSetNativeNode();
-		block.add(new DeclareValueNativeNode(name, type.toNative(), value.toNative()));
+		block.add(new DeclareValueNativeNode(declare.name, declare.type.toNative(), declare.value.toNative()));
 		block.add(new IfNativeNode(new NotNativeNode(cond.toNative()), command.toNative()));
 		return block;
 	}

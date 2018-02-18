@@ -35,8 +35,8 @@ public class IdentifierCxNode extends ValueCxNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
-		// context.findType(token.word);
-		return cast(this);
+		TypeCxNode type = context.findType(token);
+		return cast(new IdentifierCxNode(token, type));
 	}
 
 	/**

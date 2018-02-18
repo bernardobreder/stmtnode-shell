@@ -7,15 +7,15 @@ import com.stmtnode.lang.cx.SourceCodeOutput;
 import com.stmtnode.module.CodeNode;
 import com.stmtnode.module.LinkException;
 import com.stmtnode.module.NodeContext;
-import com.stmtnode.primitive.type.StructTypeNativeNode;
 import com.stmtnode.primitive.type.TypeNativeNode;
+import com.stmtnode.primitive.type.UnknownTypeNativeNode;
 
-public class StructTypeCxNode extends TypeCxNode {
+public class UnkownTypeCxNode extends TypeCxNode {
 
-	public final Token name;
+	public final Token token;
 
-	public StructTypeCxNode(Token name) {
-		this.name = name;
+	public UnkownTypeCxNode(Token token) {
+		this.token = token;
 	}
 
 	/**
@@ -23,7 +23,7 @@ public class StructTypeCxNode extends TypeCxNode {
 	 */
 	@Override
 	public <E extends CodeNode> E link(NodeContext context) throws LinkException {
-		return cast(new StructTypeCxNode(name));
+		return cast(this);
 	}
 
 	/**
@@ -31,7 +31,7 @@ public class StructTypeCxNode extends TypeCxNode {
 	 */
 	@Override
 	public void writeToSource(SourceCodeOutput output) {
-		output.write(name);
+		output.write(token.word);
 	}
 
 	/**
@@ -39,15 +39,7 @@ public class StructTypeCxNode extends TypeCxNode {
 	 */
 	@Override
 	public TypeNativeNode toNative() {
-		return new StructTypeNativeNode(name);
-	}
-
-	public String getStartConstructorName() {
-		String name = this.name.word;
-		if (!name.endsWith("_t")) {
-			return name;
-		}
-		return name.substring(0, name.length() - 2) + "_new";
+		return new UnknownTypeNativeNode(token.word);
 	}
 
 }
