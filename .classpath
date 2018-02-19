@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/module"/>
-	<classpathentry kind="src" path="src/watch"/>
 	<classpathentry kind="src" path="src/lang/compiler"/>
 	<classpathentry kind="src" path="src/lang/cx"/>
-	<classpathentry kind="src" path="src/json"/>
-	<classpathentry kind="src" path="src/runner"/>
 	<classpathentry kind="src" path="src/native"/>
+	<classpathentry kind="src" path="src/exec"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

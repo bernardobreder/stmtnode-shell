@@ -1,4 +1,4 @@
-package com.stmtnode.watch;
+package com.stmtnode.exec;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -24,13 +24,10 @@ import com.stmtnode.module.LinkException;
 import com.stmtnode.module.Node;
 import com.stmtnode.module.NodeContext;
 import com.stmtnode.primitive.NativeCodeOutput;
-import com.stmtnode.runner.RunnerProcess;
 
 public class Main {
 
 	static Log logger = new Log();
-
-	private RunnerProcess runner;
 
 	public Main(List<Path> paths, Path targetPath) throws Exception {
 		for (Entry<Path, UnitCxNode> entry : execute(paths).entrySet()) {
@@ -57,7 +54,7 @@ public class Main {
 
 	public Path createTargetPath(Entry<Path, UnitCxNode> entry, Path targetPath) {
 		if (targetPath == null) {
-			return Paths.get(entry.getKey().getParent().toString(), entry.getKey().toFile().getName() + ".c");
+			return Paths.get(entry.getKey().toFile().getParent().toString(), entry.getKey().toFile().getName() + ".c");
 		} else {
 			return targetPath.resolve(entry.getKey().toFile().getName() + ".c");
 		}
